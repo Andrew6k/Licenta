@@ -10,12 +10,12 @@ scholarly.use_proxy(pg)
 search_query = scholarly.search_author('Mihaela Breaban')
 first_author_result = next(search_query)
 author = scholarly.fill(first_author_result )
-#print(author)
+# print(first_author_result)
 #scholarly.pprint(next(search_query))
-first_publication = author['publications'][5]
+first_publication = author['publications'][20]
 first_publication_filled = scholarly.fill(first_publication)
-print(first_publication_filled['bib']['author'].split(" and "))
-# print(first_publication_filled)
+# print(first_publication_filled['bib']['author'].split(" and "))
+print(first_publication_filled)
 
 # publication_titles = [pub['bib']['title'] for pub in author['publications']]
 # print(publication_titles)
