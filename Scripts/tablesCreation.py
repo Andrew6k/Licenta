@@ -39,7 +39,7 @@ CREATE TABLE publications (
     title VARCHAR(255),
     year YEAR,
     conference VARCHAR(255),
-    summary VARCHAR(1000),
+    summary VARCHAR(1200),
     citations INT
 )
 """
