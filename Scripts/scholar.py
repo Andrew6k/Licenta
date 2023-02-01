@@ -40,100 +40,132 @@ id1 = 0
 id2 = 0
 id3 = 0
 nr_pub = 0
+nr_aut = 0
 
 data = {}
 data["authors"] = []
 data["pub"] = []
 data["domains"] = []
+data["authD"] = []
 
 domID = {} #saves primary key for every domain
 pubID = {}
 
+domKeys = []
+pubKeys = []
 
-search_query = scholarly.search_author('Mihaela Breaban')
-first_author_result = next(search_query)
-author = scholarly.fill(first_author_result, sections=['basics', 'publications'] )
-# print(author)
+data["authors"].append("Mihaela Elena Breaban")
 
+# search_query = scholarly.search_author('Mihaela Elena Breaban')
+# first_author_result = next(search_query)
+# author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
+# # print(author)
+# data["authors"].append(author['name'])
 
-mail = author["name"].lower().replace(" ",".")
-password = get_pass()
+# for coauth in author['coauthors']:
+#     if coauth['affiliation'].contains("Cuza"):
+#          data['authors'].append(coauth['name'])
 
-if author["name"] not in data["authors"]: #se reseteaza la run
-    values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, password)
-
-    insert_query = f"""
-    INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
-    VALUES {values}
-    """
-
-    cursor.execute(insert_query)
-    conn.commit()
-    data["authors"].append(author["name"]) 
-    id1 = cursor.lastrowid
-
-
-for domain in author["interests"]:
-    # domain = str(interest)
-    # print(domain)
-    if domain not in data["domains"]:
-        #print(domain)
-        values = [domain]
-
-        insert_query = """INSERT INTO domains (domain) VALUES (%s)"""
-        cursor.execute(insert_query, values)
-        conn.commit()
-        data["domains"].append(domain) 
-        domID[domain] = cursor.lastrowid
-
-    # id2 = cursor.lastrowid
-    id2 = domID[domain]
-    values = (id1, id2)
-
-    insert_query = f"""
-    INSERT INTO author_domains (author_id, domain_id)
-    VALUES {values}
-    """
-
-    cursor.execute(insert_query)
-    conn.commit()
-    # id2 = cursor.lastrowid
-
-for article in author['publications']:
-    if nr_pub >= 15:
+for author_name in data["authors"]:
+    if nr_aut == 15:
         break
-    pub = article
-    if int(pub['bib']['pub_year']) > 2010:
-        nr_pub += 1
-        if pub['bib']['title'] not in data["pub"]:
-            data["pub"].append(pub['bib']['title'])
-            pub_fill = scholarly.fill(pub, sections=['bib'])
+    nr_pub = 0
+    search_query = scholarly.search_author(author_name)
+    first_author_result = next(search_query)
+    author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
+    
+    for coauth in author['coauthors']:
+        if "Cuza" in coauth['affiliation']:
+            data['authors'].append(coauth['name'])
 
-            conference = make_string(pub_fill['bib']['citation'])
-            # conference = ''.join(i for i in pub_fill['bib']['citation'] if not i.isdigit() or i == ',')
+    mail = author["name"].lower().replace(" ",".")
+    password = get_pass()
 
-            values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, pub_fill['bib']['abstract'], int(pub_fill['num_citations']))
-
-            insert_query = f"""
-            INSERT INTO publications (title, year, conference, summary, citations)
-            VALUES {values}
-            """
-
-            cursor.execute(insert_query)
-            conn.commit()
-
-            pubID[article['bib']['title']] = cursor.lastrowid
-
-        id3 = pubID[article['bib']['title']]
-        values = (id1, id3)
+    if ((author["name"] not in data["authD"]) and nr_aut <15): #se reseteaza la run
+        nr_aut += 1
+        values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, password)
 
         insert_query = f"""
-        INSERT INTO author_publications (author_id, publication_id)
+        INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
         VALUES {values}
         """
 
         cursor.execute(insert_query)
         conn.commit()
+        data["authD"].append(author["name"]) 
+        id1 = cursor.lastrowid
+
+
+    for domain in author["interests"]:
+        # domain = str(interest)
+        # print(domain)
+        if domain not in data["domains"]:
+            #print(domain)
+            values = [domain]
+
+            insert_query = """INSERT INTO domains (domain) VALUES (%s)"""
+            cursor.execute(insert_query, values)
+            conn.commit()
+            data["domains"].append(domain) 
+            domID[domain] = cursor.lastrowid
+
+        # id2 = cursor.lastrowid
+        id2 = domID[domain]
+        values = (id1, id2)
+        if values not in domKeys:
+            domKeys.append(values)
+            insert_query = f"""
+            INSERT INTO author_domains (author_id, domain_id)
+            VALUES {values}
+            """
+
+            cursor.execute(insert_query)
+            conn.commit()
+        # id2 = cursor.lastrowid
+
+    for article in author['publications']:
+        if nr_pub >= 15:
+            break
+        pub = article
+        if (('pup_year' in pub['bib']) and (int(pub['bib']['pub_year']) > 2010)): #here
+            nr_pub += 1
+            if pub['bib']['title'] not in data["pub"]:
+                data["pub"].append(pub['bib']['title'])
+                pub_fill = scholarly.fill(pub, sections=['bib'])
+
+                conference = make_string(pub_fill['bib']['citation'])
+                # conference = ''.join(i for i in pub_fill['bib']['citation'] if not i.isdigit() or i == ',')
+
+                if 'abstract' in pub_fill['bib']: #here
+                    abstract = pub_fill['bib']['abstract']
+                else:
+                    abstract = "Not available"
+
+                values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']))
+
+                insert_query = f"""
+                INSERT INTO publications (title, year, conference, summary, citations)
+                VALUES {values}
+                """
+
+                cursor.execute(insert_query)
+                conn.commit()
+
+                pubID[article['bib']['title']] = cursor.lastrowid
+
+            id3 = pubID[article['bib']['title']]
+            values = (id1, id3)
+
+            if values not in pubKeys:
+
+                pubKeys.append(values)
+                insert_query = f"""
+                INSERT INTO author_publications (author_id, publication_id)
+                VALUES {values}
+                """
+
+                cursor.execute(insert_query)
+                conn.commit()
 
 
 cursor.close()

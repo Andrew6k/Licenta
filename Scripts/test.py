@@ -13,9 +13,10 @@ first_author_result = next(search_query)
 # scholarly.pprint(first_author_result)
 
 # Retrieve all the details for the author
-author = scholarly.fill(first_author_result, sections=['basics', 'publications'] )
+author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
 # print(author)
 print("------------")
+# print(author['coauthors'][0]['name'])
 # scholarly.pprint(author)
 
 # Take a closer look at the first publication
@@ -23,15 +24,17 @@ first_publication = author['publications'][3]
 # print(first_publication['bib']['title'])
 # print(first_publication['bib']['pub_year'])
 # print(first_publication['bib']['citation'])
-print(first_publication['num_citations'])
+# print(first_publication['num_citations'])
 first_publication_filled = scholarly.fill(first_publication, sections=['bib'])
 # print(first_publication_filled)
-print(first_publication)
-print("-------------")
+# print(first_publication)
+# print("-------------")
 # print(first_publication_filled['bib']['title'])
 # print(first_publication_filled['bib']['author'].split(" and "))
-# print(first_publication_filled['bib']['abstract'])
-
+if 'abstract' in first_publication_filled:
+    print(first_publication_filled['bib']['abstract']) #
+else:
+    print("no")
 # Print the titles of the author's publications
 # publication_titles = [pub['bib']['title'] for pub in author['publications']]
 # print(publication_titles)
