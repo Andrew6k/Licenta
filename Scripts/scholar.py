@@ -1,13 +1,18 @@
 from scholarly import scholarly
 from scholarly import ProxyGenerator
+from cryptography.fernet import Fernet
 import mysql.connector
 import random
 import string
+import time
 
 def get_pass():
     alph = string.ascii_lowercase + string.digits + "!#&()?/"
+    keyF = Fernet.generate_key()
     result = ''.join(random.choice(alph) for i in range(6))
-    return result
+    fernet = Fernet(keyF)
+    enc = fernet.encrypt(result.encode())
+    return enc, fernet
 
 def make_string(str):
     str = str.replace('-','')
@@ -22,154 +27,161 @@ def make_string(str):
                 str2 = str2 + ' ' + word
     return str2
 
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="scholar"
-)
+try:
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="scholar"
+        )
+except:
+    print("Database not available!")
 
-cursor = conn.cursor()
+else:
+    cursor = conn.cursor()
 
+    pg = ProxyGenerator()
+    pg.FreeProxies()
+    scholarly.use_proxy(pg)
 
-pg = ProxyGenerator()
-pg.FreeProxies()
-scholarly.use_proxy(pg)
-
-id1 = 0
-id2 = 0
-id3 = 0
-nr_pub = 0
-nr_aut = 0
-
-data = {}
-data["authors"] = []
-data["pub"] = []
-data["domains"] = []
-data["authD"] = []
-
-domID = {} #saves primary key for every domain
-pubID = {}
-
-domKeys = []
-pubKeys = []
-
-data["authors"].append("Mihaela Elena Breaban")
-
-# search_query = scholarly.search_author('Mihaela Elena Breaban')
-# first_author_result = next(search_query)
-# author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
-# # print(author)
-# data["authors"].append(author['name'])
-
-# for coauth in author['coauthors']:
-#     if coauth['affiliation'].contains("Cuza"):
-#          data['authors'].append(coauth['name'])
-
-for author_name in data["authors"]:
-    if nr_aut == 15:
-        break
+    id1 = 0
+    id2 = 0
+    id3 = 0
     nr_pub = 0
-    search_query = scholarly.search_author(author_name)
-    first_author_result = next(search_query)
-    author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
-    
-    for coauth in author['coauthors']:
-        if "Cuza" in coauth['affiliation']:
-            data['authors'].append(coauth['name'])
+    nr_aut = 0
 
-    mail = author["name"].lower().replace(" ",".")
-    password = get_pass()
+    data = {}
+    data["authors"] = []
+    data["pub"] = []
+    data["domains"] = []
+    data["authD"] = []
 
-    if ((author["name"] not in data["authD"]) and nr_aut <15): #se reseteaza la run
-        nr_aut += 1
-        values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, password)
+    domID = {} #saves primary key for every domain
+    pubID = {}
 
-        insert_query = f"""
-        INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
-        VALUES {values}
-        """
+    domKeys = []
+    pubKeys = []
 
-        cursor.execute(insert_query)
-        conn.commit()
-        data["authD"].append(author["name"]) 
-        id1 = cursor.lastrowid
+    data["authors"].append("Mihaela Elena Breaban")
 
+    # search_query = scholarly.search_author('Mihaela Elena Breaban')
+    # first_author_result = next(search_query)
+    # author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
+    # # print(author)
+    # data["authors"].append(author['name'])
 
-    for domain in author["interests"]:
-        # domain = str(interest)
-        # print(domain)
-        if domain not in data["domains"]:
-            #print(domain)
-            values = [domain]
+    # for coauth in author['coauthors']:
+    #     if coauth['affiliation'].contains("Cuza"):
+    #          data['authors'].append(coauth['name'])
 
-            insert_query = """INSERT INTO domains (domain) VALUES (%s)"""
-            cursor.execute(insert_query, values)
-            conn.commit()
-            data["domains"].append(domain) 
-            domID[domain] = cursor.lastrowid
+    for author_name in data["authors"]:
+        if nr_aut == 15:
+            break
+        nr_pub = 0
+        search_query = scholarly.search_author(author_name)
+        first_author_result = next(search_query)
+        time.sleep(1)
+        author = scholarly.fill(first_author_result, sections=['basics', 'publications', 'coauthors'] )
+        
+        for coauth in author['coauthors']:
+            if "Cuza" in coauth['affiliation']:
+                data['authors'].append(coauth['name'])
 
-        # id2 = cursor.lastrowid
-        id2 = domID[domain]
-        values = (id1, id2)
-        if values not in domKeys:
-            domKeys.append(values)
+        mail = author["name"].lower().replace(" ",".")
+        password, fernet = get_pass()
+
+        if ((author["name"] not in data["authD"]) and nr_aut <15): #se reseteaza la run
+            nr_aut += 1
+            values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, fernet.decrypt(password).decode())
+
             insert_query = f"""
-            INSERT INTO author_domains (author_id, domain_id)
+            INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
             VALUES {values}
             """
 
             cursor.execute(insert_query)
             conn.commit()
-        # id2 = cursor.lastrowid
+            data["authD"].append(author["name"]) 
+            id1 = cursor.lastrowid
 
-    for article in author['publications']:
-        if nr_pub >= 15:
-            break
-        pub = article
-        if (('pup_year' in pub['bib']) and (int(pub['bib']['pub_year']) > 2010)): #here
-            nr_pub += 1
-            if pub['bib']['title'] not in data["pub"]:
-                data["pub"].append(pub['bib']['title'])
-                pub_fill = scholarly.fill(pub, sections=['bib'])
 
-                conference = make_string(pub_fill['bib']['citation'])
-                # conference = ''.join(i for i in pub_fill['bib']['citation'] if not i.isdigit() or i == ',')
+        for domain in author["interests"]:
+            # domain = str(interest)
+            # print(domain)
+            if domain not in data["domains"]:
+                #print(domain)
+                values = [domain]
 
-                if 'abstract' in pub_fill['bib']: #here
-                    abstract = pub_fill['bib']['abstract']
-                else:
-                    abstract = "Not available"
+                insert_query = "INSERT INTO domains (domain) VALUES (%s)"
+                cursor.execute(insert_query, values)
+                conn.commit()
+                data["domains"].append(domain) 
+                domID[domain] = cursor.lastrowid
 
-                values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']))
-
+            # id2 = cursor.lastrowid
+            id2 = domID[domain]
+            values = (id1, id2)
+            if values not in domKeys:
+                domKeys.append(values)
                 insert_query = f"""
-                INSERT INTO publications (title, year, conference, summary, citations)
+                INSERT INTO author_domains (author_id, domain_id)
                 VALUES {values}
                 """
 
                 cursor.execute(insert_query)
                 conn.commit()
+            # id2 = cursor.lastrowid
 
-                pubID[article['bib']['title']] = cursor.lastrowid
+        for article in author['publications']:
+            if nr_pub >= 15:
+                break
+            pub = article
+            if ((int(pub['num_citations'])>= 2) and ('pub_year' in pub['bib']) and (int(pub['bib']['pub_year']) >= 2010)): #here
+                print(nr_pub)
+                nr_pub += 1
+                time.sleep(2)
+                if pub['bib']['title'] not in data["pub"]:
+                    data["pub"].append(pub['bib']['title'])
+                    pub_fill = scholarly.fill(pub, sections=['bib'])
 
-            id3 = pubID[article['bib']['title']]
-            values = (id1, id3)
+                    conference = make_string(pub_fill['bib']['citation'])
+                    # conference = ''.join(i for i in pub_fill['bib']['citation'] if not i.isdigit() or i == ',')
 
-            if values not in pubKeys:
+                    if 'abstract' in pub_fill['bib']: #here
+                        print("Exists")
+                        abstract = pub_fill['bib']['abstract']
+                    else:
+                        abstract = "Not available"
 
-                pubKeys.append(values)
-                insert_query = f"""
-                INSERT INTO author_publications (author_id, publication_id)
-                VALUES {values}
-                """
+                    values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']))
 
-                cursor.execute(insert_query)
-                conn.commit()
+                    insert_query = f"""
+                    INSERT INTO publications (title, year, conference, summary, citations)
+                    VALUES {values}
+                    """
 
+                    cursor.execute(insert_query)
+                    conn.commit()
 
-cursor.close()
-conn.close()
+                    pubID[pub['bib']['title']] = cursor.lastrowid
+
+                id3 = pubID[pub['bib']['title']]
+                values = (id1, id3)
+
+                if values not in pubKeys:
+
+                    pubKeys.append(values)
+                    insert_query = f"""
+                    INSERT INTO author_publications (author_id, publication_id)
+                    VALUES {values}
+                    """
+
+                    cursor.execute(insert_query)
+                    conn.commit()
+
+    #export list, check after
+    cursor.close()
+    conn.close()
 
 #scholarly.pprint(next(search_query))
 # first_publication = author['publications'][20]

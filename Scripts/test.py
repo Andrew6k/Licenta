@@ -25,16 +25,21 @@ first_publication = author['publications'][3]
 # print(first_publication['bib']['pub_year'])
 # print(first_publication['bib']['citation'])
 # print(first_publication['num_citations'])
-first_publication_filled = scholarly.fill(first_publication, sections=['bib'])
+# first_publication_filled = scholarly.fill(first_publication, sections=['bib'])
 # print(first_publication_filled)
 # print(first_publication)
 # print("-------------")
 # print(first_publication_filled['bib']['title'])
 # print(first_publication_filled['bib']['author'].split(" and "))
-if 'abstract' in first_publication_filled:
-    print(first_publication_filled['bib']['abstract']) #
+if 'num_citations' in first_publication:
+    print(first_publication['num_citations']) #
 else:
     print("no")
+
+# if 'pub_year' in first_publication_filled['bib']:
+#     print(first_publication_filled['bib']['pub_year'])
+# else:
+#     print("no")
 # Print the titles of the author's publications
 # publication_titles = [pub['bib']['title'] for pub in author['publications']]
 # print(publication_titles)
