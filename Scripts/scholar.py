@@ -94,13 +94,16 @@ else:
             nr_aut += 1
             values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, fernet.decrypt(password).decode())
 
+            # with open("output.txt", "a") as file:
+            #     file.write(author["name"] + "\n")
+
             insert_query = f"""
             INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
             VALUES {values}
             """
 
             cursor.execute(insert_query)
-            conn.commit()
+            # conn.commit()
             data["authD"].append(author["name"]) 
             id1 = cursor.lastrowid
 
@@ -114,9 +117,12 @@ else:
 
                 insert_query = "INSERT INTO domains (domain) VALUES (%s)"
                 cursor.execute(insert_query, values)
-                conn.commit()
+                # conn.commit()
                 data["domains"].append(domain) 
                 domID[domain] = cursor.lastrowid
+
+                # with open("output.txt", "a") as file:
+                #     file.write(domain + " " + str(domID[domain]) + "\n")
 
             # id2 = cursor.lastrowid
             id2 = domID[domain]
@@ -129,7 +135,7 @@ else:
                 """
 
                 cursor.execute(insert_query)
-                conn.commit()
+                # conn.commit()
             # id2 = cursor.lastrowid
 
         for article in author['publications']:
@@ -143,6 +149,9 @@ else:
                 if pub['bib']['title'] not in data["pub"]:
                     data["pub"].append(pub['bib']['title'])
                     pub_fill = scholarly.fill(pub, sections=['bib'])
+
+                    # with open("output.txt", "a") as file:
+                    #     file.write(pub['bib']['title'] + "\n")
 
                     conference = make_string(pub_fill['bib']['citation'])
                     # conference = ''.join(i for i in pub_fill['bib']['citation'] if not i.isdigit() or i == ',')
@@ -161,7 +170,7 @@ else:
                     """
 
                     cursor.execute(insert_query)
-                    conn.commit()
+                    # conn.commit()
 
                     pubID[pub['bib']['title']] = cursor.lastrowid
 
@@ -177,7 +186,7 @@ else:
                     """
 
                     cursor.execute(insert_query)
-                    conn.commit()
+        conn.commit()
 
     #export list, check after
     cursor.close()
