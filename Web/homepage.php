@@ -22,5 +22,6 @@
         <!-- Add more result items as needed -->
       </div>
     </div>
+    <?php echo "" ?>
 </body>
 </html>
