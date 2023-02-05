@@ -120,10 +120,10 @@ if __name__ == "__main__":
                         else:
                             abstract = "Not available"
 
-                        values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']))
+                        values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']), pub_fill['pub_url'])
 
                         insert_query = f"""
-                        INSERT INTO publications (title, year, conference, summary, citations)
+                        INSERT INTO publications (title, year, conference, summary, citations, link)
                         VALUES {values}
                         """
 

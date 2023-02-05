@@ -40,7 +40,8 @@ CREATE TABLE publications (
     year YEAR,
     conference VARCHAR(255),
     summary VARCHAR(1200),
-    citations INT
+    citations INT,
+    link VARCHAR(255)
 )
 """
 cursor.execute(table_create)

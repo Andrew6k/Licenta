@@ -1,12 +1,23 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-image: url('image.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
   }
 
 .container {
     width: 80%;
     margin: 0 auto;
   }
+
+.nav{
+    text-align: right;
+    padding: 10px 30px;
+    background-color: rgb(222, 189, 147);
+}
 .search-container {
     text-align: center;
     margin-top: 20px;

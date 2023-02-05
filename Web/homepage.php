@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="nav">
+    <a href="login.php">Login</a>
+</div>
 <div class="container">
       <div class="search-container">
         <input type="text" class="search-input" placeholder="Search">
