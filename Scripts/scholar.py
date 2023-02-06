@@ -52,12 +52,13 @@ else:
 
     data = {}
     data["authors"] = []
-    data["pub"] = []
     data["domains"] = []
     data["authD"] = []
 
+    authID = {}
     domID = {} #saves primary key for every domain
     pubID = {}
+
 
     domKeys = []
     pubKeys = []
@@ -78,6 +79,7 @@ else:
         if nr_aut == 15:
             break
         nr_pub = 0
+        # print(author_name)
         search_query = scholarly.search_author(author_name)
         first_author_result = next(search_query)
         time.sleep(1)
@@ -106,6 +108,7 @@ else:
             # conn.commit()
             data["authD"].append(author["name"]) 
             id1 = cursor.lastrowid
+            authID[author["name"]] = id1
 
 
         for domain in author["interests"]:
@@ -161,8 +164,13 @@ else:
                         abstract = pub_fill['bib']['abstract']
                     else:
                         abstract = "Not available"
+                    
+                    if 'pub_url' in pub_fill:
+                        link = pub_fill['pub_url']
+                    else:
+                        link = "Not available"
 
-                    values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']), pub_fill['pub_url'])
+                    values = (pub_fill['bib']['title'], int(pub_fill['bib']['pub_year']), conference, abstract, int(pub_fill['num_citations']), link)
 
                     insert_query = f"""
                     INSERT INTO publications (title, year, conference, summary, citations, link)
@@ -173,6 +181,18 @@ else:
                     # conn.commit()
 
                     pubID[pub['bib']['title']] = cursor.lastrowid
+
+                    otherAuth = pub_fill['bib']['author'].split(" and ")
+                    for auth in otherAuth:
+                        if auth in data["authD"] and auth != author["name"]:
+                            values = (authID[auth], pubID[pub['bib']['title']])
+                            insert_query = f"""
+                                INSERT INTO author_publications (author_id, publication_id)
+                                VALUES {values}
+                                """
+                            cursor.execute(insert_query)
+                            
+
 
                 id3 = pubID[pub['bib']['title']]
                 values = (id1, id3)
