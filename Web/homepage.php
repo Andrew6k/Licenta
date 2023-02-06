@@ -9,19 +9,20 @@
 </head>
 <body>
 <div class="nav">
-    <a href="login.php">Login</a>
+    <a href="login.php">Log in</a>
 </div>
 <div class="container">
+      <img src="logo.png" alt="My Logo">
       <div class="search-container">
         <input type="text" class="search-input" placeholder="Search">
-        <button class="search-button">Search</button>
+        <input type="submit" value="Search">
       </div>
-      <div class="results-container">
+      <!-- <div class="results-container">
         <div class="result-item">
           <div class="title">Article Title</div>
           <div class="author">Author Name</div>
           <div class="abstract">Abstract of the article goes here...</div>
-        </div>
+        </div> -->
         <!-- Add more result items as needed -->
       </div>
     </div>
