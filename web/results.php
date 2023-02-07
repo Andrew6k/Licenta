@@ -17,7 +17,13 @@
   </head>
 <body>
 <div class="nav">
-    <a href="login.php">Log in</a>
+  <?php if($_SESSION['username']) {
+      $name = $_SESSION['username'];
+      echo "<a href='mypage.php'>$name</a><br>";
+    }else {
+      echo "<a href='login.php'>Log in</a><br>";
+    }
+    ?>
 </div>
 <div class="container-res">
       <img src="logo.png" alt="My Logo">
@@ -105,13 +111,14 @@
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
+          $id = $rows['id'];
         ?>
             <tr>
                 <td><?php echo $rows['title']; ?></td>
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
-                <td><?php echo $rows['link']; ?></td>
+                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
             </tr>
             <?php
         }
@@ -141,13 +148,14 @@
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
+          $id = $rows['id'];
         ?>
             <tr>
                 <td><?php echo $rows['title']; ?></td>
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
-                <td><?php echo $rows['link']; ?></td>
+                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
             </tr>
             <?php
         }
@@ -158,7 +166,7 @@
 </html>
 
     <?php }else {
-      $sql = "SELECT DISTINCT name,affiliation,email_domain,citations,domain FROM authors JOIN author_domains ON authors.id = author_domains.author_id JOIN domains ON domains.id = author_domains.domain_id WHERE domains.domain like '%$word%'";
+      $sql = "SELECT DISTINCT authors.id,name,affiliation,email_domain,citations,domain FROM authors JOIN author_domains ON authors.id = author_domains.author_id JOIN domains ON domains.id = author_domains.domain_id WHERE domains.domain like '%$word%'";
       $result=mysqli_query($mysqli,$sql);
         ?>
         <table align="center" border="1px"">
@@ -172,10 +180,13 @@
             <th>Email_domain</th>
             <th>Citations</th>
             <th>Domain</th>
+            <th>Link</th>
         </t>
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
+          $id = $rows['id'];
+          $name = $rows['name'];
         ?>
             <tr>
                 <td><?php echo $rows['name']; ?></td>
@@ -183,6 +194,7 @@
                 <td><?php echo $rows['email_domain']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
                 <td><?php echo $rows['domain']; ?></td>
+                <td><?php echo "<a href='details.php?id=$id'>$name</a><br>";?></td>
             </tr>
             <?php
         }

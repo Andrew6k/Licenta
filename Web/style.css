@@ -46,7 +46,7 @@ background-repeat: no-repeat;
   margin: 0 auto;
   row-gap: 9px;
 }
-table{
+body table{
   width:90%; 
   line-height:60px;
   table-layout: fixed;
@@ -147,7 +147,9 @@ background-color: #105212;
   margin-bottom: 20px;
 }
 
-
+.articles table{
+  table-layout: auto;
+}
 
 @media screen and (max-width: 850px) {
   .container{

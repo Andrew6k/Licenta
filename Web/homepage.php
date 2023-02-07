@@ -17,7 +17,13 @@
   </head>
 <body>
 <div class="nav">
-    <a href="login.php">Log in</a>
+    <?php if($_SESSION['username']) {
+      $name = $_SESSION['username'];
+      echo "<a href='mypage.php'>$name</a><br>";
+    }else {
+      echo "<a href='login.php'>Log in</a><br>";
+    }
+    ?>
 </div>
 <div class="container">
       <img src="logo.png" alt="My Logo">

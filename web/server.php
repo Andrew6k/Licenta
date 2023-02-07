@@ -11,7 +11,45 @@
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
      }
 
-    
+	if (isset($_POST['login'])){
+		$username=$mysqli->real_escape_string($_POST['username']);
+		$password=$mysqli->real_escape_string($_POST['password']);
+
+		if(empty($username)){
+			array_push($errors, "Username is required");
+		}
+		if(empty($password)){
+			array_push($errors, "Password is required");
+		}
+		if(count($errors)==0)
+		{
+			$sql="SELECT * FROM authors WHERE mail='$username' AND password='$password'";
+			$result=mysqli_query($mysqli,$sql);
+			
+			if(mysqli_num_rows($result)==1){
+				$_SESSION['username']=$username;
+				$_SESSION['success']="You are now logged in";
+
+				$mail = $_SESSION['username'];
+				$sql = "SELECT isadmin from authors where mail like '$mail'";
+				$rez = mysqli_query($mysqli,$sql);
+				while ($inreg = mysqli_fetch_assoc($rez)){
+					$admin = $inreg['isadmin'];
+					$_SESSION['isadmin'] = $admin;
+					if($admin == 1)
+						header('location: ../principal/principal-admin.php');
+					else{
+						header('location: homepage.php');
+					}
+				}
+
+			}else{
+				array_push($errors, "wrong username/password combination");
+
+			}
+		}
+
+	}
     // $searchQuery = $_POST["search_query"];
     // // $conn = new mysqli("localhost", "username", "password", "database");
     // $stmt = $conn->prepare("SELECT * FROM authors WHERE name LIKE ?");
