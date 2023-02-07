@@ -56,7 +56,7 @@
           ?>
           <table align="center" border="1px"">
           <tr>
-              <th colspan="4"><h2 style="text-align: center;">Results</h2></th>
+              <th colspan="5"><h2 style="text-align: center;">Results</h2></th>
           </tr>
 
           <t>
@@ -64,16 +64,20 @@
               <th>Affiliation</th>
               <th>Email_domain</th>
               <th>Citations</th>
+              <th>Link</th>
           </t>
           <?php
           while($rows=mysqli_fetch_assoc($result))
           {
+            $id = $rows['id'];
+            $name = $rows['name'];
           ?>
               <tr>
                   <td><?php echo $rows['name']; ?></td>
                   <td><?php echo $rows['affiliation']; ?></td>
                   <td><?php echo $rows['email_domain']; ?></td>
                   <td><?php echo $rows['citations']; ?></td>
+                  <td><?php echo "<a href='details.php?id=$id'>$name</a><br>";?></td>
               </tr>
               <?php
           }
