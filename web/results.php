@@ -1,7 +1,3 @@
-<?php
-  // include('server.php');
-  
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,3 +35,37 @@
 
 </body>
 </html>
+<?php
+    include('server.php');
+    if($_POST["search-querry"] == ""){
+        echo "<h2>No results found </h2>";
+    }else{
+        $search = trim($_POST["search-querry"]);
+        $querry = $mysqli->prepare("SELECT * FROM authors");
+        // $querry->bind_param("s", $search);
+        $result = mysqli_query($mysqli,$querry);
+        ?>
+        <table align="center" border="1px" style="width:700px; line-height:60px;">
+        <tr>
+            <th colspan="5"><h2 style="text-align: center;">Stoc Existent</h2></th>
+        </tr>
+
+        <t>
+            <th>ID</th>
+            <th>Name</th>
+            <
+        </t>
+        <?php
+        while($rows=mysqli_fetch_assoc($result))
+        {
+        ?>
+            <tr>
+                <td><?php echo $rows['id']; ?></td>
+                <td><?php echo $rows['name']; ?></td>
+
+            </tr>
+            <?php
+        }
+        ?>
+    </table>
+    <?php } ?>
