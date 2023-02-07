@@ -24,6 +24,12 @@
       <div class="search-container">
       <form id="search-form" action="results.php" method="POST">
         <input type="text" name="search-querry" class="search-input" placeholder="Search authors or publications">
+        <select name="criteria-select">
+            <option value="author">Author</option>
+            <option value="title">Title</option>
+            <option value="domain">Domain</option>
+            <option value="year">Year</option>
+        </select>
         <input type="submit" value="Search">
       </form>
       </div>
