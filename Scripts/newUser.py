@@ -65,9 +65,10 @@ if __name__ == "__main__":
                 search_query = scholarly.search_author(sys.argv[1])
                 first_author_result = next(search_query)
                 author = scholarly.fill(first_author_result, sections=['basics', 'publications'] )
+                nameA = author['name']
 
                 # insert_query = "INSERT INTO authors (name, affiliation, email_domain, citations, mail, password) VALUES (%s, %s, %s, %s, %s, %s)"
-                data = (sys.argv[1], author["affiliation"], author["email_domain"], int(author["citedby"]), sys.argv[2], sys.argv[3])
+                data = (nameA, author["affiliation"], author["email_domain"], int(author["citedby"]), sys.argv[2], sys.argv[3])
                 insert_query = f"""
                 INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
                 VALUES {data}
@@ -91,7 +92,7 @@ if __name__ == "__main__":
                         conn.commit()
                         id2 = cursor.lastrowid
 
-                        insert_query = "INSERT INTO author_domains (author_id, domain_id) VALUES (%d, %d)"
+                        insert_query = "INSERT INTO author_domains (author_id, domain_id) VALUES (%s, %s)"
                         data = (id1, id2)
 
                         if data not in domKeys:
@@ -103,7 +104,7 @@ if __name__ == "__main__":
                 for article in author['publications']:
                     if nr_pub >= 15:
                         break
-                    pub = article
+                    pub = article['bib']['title'];
                     if testP(pub):
                         insert_query = "INSERT INTO author_publications (author_id, publication_id) VALUES (%d, %d)"
                         data = (id1, testP(pub))
@@ -136,6 +137,7 @@ if __name__ == "__main__":
 
                         cursor.execute(insert_query, data)
                         conn.commit()
+                        print("Author registered successfully")
 
             else:
                 print("The user already exists")

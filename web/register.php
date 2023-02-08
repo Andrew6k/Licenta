@@ -7,8 +7,12 @@ if(isset($_POST['submit'])){
     $user=$mysqli->real_escape_string($_POST['user']);
     $pass=$mysqli->real_escape_string($_POST['password']);
 
-    $command = 'python ../scripts/newUser.py $name $user $pass';
-    echo $command;
+    $name = str_replace(' ', '', $name);
+    $command = "python ../scripts/newUser.py '$name' '$user' '$pass'";
+    // echo $command;
+    exec($command, $output, $return_var);
+    echo $output;
+    // echo $return_var;
     // header('location:tables.php?obj=auth');
     // exit;
 

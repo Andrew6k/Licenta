@@ -63,3 +63,4 @@ else:
         data = (abstract, citations, id)
         cursor.execute(update_query, data)
     conn.commit()
+    print("Succes!")
