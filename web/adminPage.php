@@ -78,55 +78,37 @@
         } }
         // print_r($fields)
     ?>
-    </div>
-</div>
-
-<div class="articles">
-    <?php 
-      $nr = intval($id);
-      $sql = "SELECT id, title, conference, year, citations, link FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
-      $result=mysqli_query($mysqli,$sql);
-        ?>
-        <table align="center" border="1px"">
-        <tr>
-            <th colspan="5"><h2 style="text-align: center;">Publications</h2></th>
-        </tr>
-
-        <t>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
-            <th>Link</th>
-        </t>
-        <?php
-        while($rows=mysqli_fetch_assoc($result))
-        {
-            $id = $rows['id'];
-            $title = $rows['title'];
-        ?>
-            <tr>
-                <td><?php echo $rows['title']; ?></td>
-                <td><?php echo $rows['conference']; ?></td>
-                <td><?php echo $rows['year']; ?></td>
-                <td><?php echo $rows['citations']; ?></td>
-                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
-            </tr>
-            <?php
-        } 
-        ?>
-    </table>
-      
-</div>
-
-<div class="operations">
-<div class="buttons">
+    <div class="buttons">
         <h3>Export options</h3>
         <form action="mypage.php" method="post" >
+        <?php 
+          if ($isadmin == 1) { ?>
+        <select name="export-select">
+            <option value="Authors">Authors</option>
+            <option value="Publications">Publications</option>
+            <option value="Domains">Domains</option>
+        </select>
+        <?php } ?>
             <input type="submit" class="btn-submit" name="eCSV" value="Export CSV">
             <input type="submit" class="btn-submit" name="eJSON" value="Export JSON">
             <!-- <input type="submit" class="btn-submit" name="ePDF" value="Export PDF"> -->
         </form>
+    </div>
+    </div>
+</div>
+
+<div class="operations">
+    <div class="reg">
+        <h3>New author</h3>
+        <a href="register.php">Register</a>
+    </div>
+    <div class="update">
+        <h3>Update database</h3>
+        <a href="update.php">Update</a>
+    </div>
+    <div class="display">
+        <h3>Display graph</h3>
+        <a href="graph.php">Citations graph</a>
     </div>
   </div>
 </body>

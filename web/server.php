@@ -14,7 +14,7 @@
 	if (isset($_POST['login'])){
 		$username=$mysqli->real_escape_string($_POST['username']);
 		$password=$mysqli->real_escape_string($_POST['password']);
-
+		$isadmin = $mysqli->real_escape_string($_POST['isadmin']);
 		if(empty($username)){
 			array_push($errors, "Username is required");
 		}
@@ -29,7 +29,7 @@
 			if(mysqli_num_rows($result)==1){
 				$_SESSION['username']=$username;
 				$_SESSION['success']="You are now logged in";
-
+				$_SESSION['isadmin']=$isadmin;
 				$mail = $_SESSION['username'];
 				$sql = "SELECT isadmin from authors where mail like '$mail'";
 				$rez = mysqli_query($mysqli,$sql);
@@ -37,7 +37,7 @@
 					$admin = $inreg['isadmin'];
 					$_SESSION['isadmin'] = $admin;
 					if($admin == 1)
-						header('location: ../principal/principal-admin.php');
+						header('location: homepage.php');
 					else{
 						header('location: homepage.php');
 					}

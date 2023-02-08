@@ -31,12 +31,19 @@
   </head>
 <body>
 <div class="nav">
-    <?php if($_SESSION['username']) {
+<?php if(isset($_SESSION['username']) and isset($_SESSION['isadmin']) and ($_SESSION['isadmin'] == 0)) {
       $name = $_SESSION['username'];
       echo "<a href='logout.php'>Logout</a>";
+      
       echo "<a href='mypage.php'>$name</a>";
+      
+    }elseif (isset($_SESSION['username']) and isset($_SESSION['isadmin']) and ($_SESSION['isadmin'] == 1)) {
+      $name = $_SESSION['username'];
+      echo "<a href='logout.php'>Logout</a>";
+      
+      echo "<a href='adminPage.php'>$name</a>";
     }else {
-      echo "<a href='login.php'>Log in</a><br>";
+      echo "<a href='login.php'>Log in</a>";
     }
     ?>
     <a href="homepage.php">Home</a>

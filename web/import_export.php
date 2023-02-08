@@ -1,34 +1,109 @@
 <?php
 
 if(isset($_POST['eCSV'])){
-    $filename = "publications_". date('m-d') . ".csv";
-    $delimitator = ",";
+    if (isset($_POST['export-select'])){
+    $category = $_POST["export-select"];
+    if($category == "Authors"){
+        $filename = "authors_". date('m-d') . ".csv";
+        $delimitator = ",";
 
-    $mail = $_SESSION['username'];
-    $sql = "SELECT id FROM authors WHERE mail='$mail'";
-    $result = mysqli_query($mysqli, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $id = $row["id"];}
+        $file = fopen("php://memory","w");
+        $fields = array('ID','Name','Affiliation','email_domain','Citations');
+        fputcsv($file, $fields, $delimitator);
 
-    $file = fopen("php://memory","w");
-    $fields = array('ID','Title','Year','Conference','Summary','Citations');
-    fputcsv($file, $fields, $delimitator);
+        $sql = "SELECT id, name, affiliation, email_domain, citations FROM authors;";
+        $result=mysqli_query($mysqli,$sql);
+        while($rows=mysqli_fetch_assoc($result))
+            {
+                $line = array($rows['id'],$rows['name'],$rows['affiliation'],$rows['email_domain'],$rows['citations']);
+                fputcsv($file, $line, $delimitator);
+            }
+        
+        fseek($file, 0);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '";');
 
-    $sql = "SELECT id, title, conference, year, citations, link FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$id'";
-    $result=mysqli_query($mysqli,$sql);
-    while($rows=mysqli_fetch_assoc($result))
-        {
-            $line = array($rows['id'],$rows['title'],$rows['conference'],$rows['year'],$rows['citations']);
-            fputcsv($file, $line, $delimitator);
-         }
-    
-    fseek($file, 0);
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="' . $filename . '";');
+        fpassthru($file);
+        exit(); 
 
-    fpassthru($file);
-    exit();
+    }elseif ($category == "Domains"){
+        $filename = "domains_". date('m-d') . ".csv";
+        $delimitator = ",";
+
+        $file = fopen("php://memory","w");
+        $fields = array('ID','Domain');
+        fputcsv($file, $fields, $delimitator);
+
+        $sql = "SELECT id, domain FROM domains;";
+        $result=mysqli_query($mysqli,$sql);
+        while($rows=mysqli_fetch_assoc($result))
+            {
+                $line = array($rows['id'],$rows['domain']);
+                fputcsv($file, $line, $delimitator);
+            }
+        
+        fseek($file, 0);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+        fpassthru($file);
+        exit();
+
+    }else {
+        $filename = "publications_". date('m-d') . ".csv";
+        $delimitator = ",";
+
+        $file = fopen("php://memory","w");
+        $fields = array('ID','Title','Year','Conference','Summary','Citations');
+        fputcsv($file, $fields, $delimitator);
+
+        $sql = "SELECT id, title, conference, year, citations FROM publications";
+        $result=mysqli_query($mysqli,$sql);
+        while($rows=mysqli_fetch_assoc($result))
+            {
+                $line = array($rows['id'],$rows['title'],$rows['conference'],$rows['year'],$rows['citations']);
+                fputcsv($file, $line, $delimitator);
+            }
+        
+        fseek($file, 0);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+        fpassthru($file);
+        exit();
+
+    }
+
+    }else {
+        $filename = "publications_". date('m-d') . ".csv";
+        $delimitator = ",";
+
+        $mail = $_SESSION['username'];
+        $sql = "SELECT id FROM authors WHERE mail='$mail'";
+        $result = mysqli_query($mysqli, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $id = $row["id"];}
+
+        $file = fopen("php://memory","w");
+        $fields = array('ID','Title','Year','Conference','Summary','Citations');
+        fputcsv($file, $fields, $delimitator);
+
+        $sql = "SELECT id, title, conference, year, citations, link FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$id'";
+        $result=mysqli_query($mysqli,$sql);
+        while($rows=mysqli_fetch_assoc($result))
+            {
+                $line = array($rows['id'],$rows['title'],$rows['conference'],$rows['year'],$rows['citations']);
+                fputcsv($file, $line, $delimitator);
+            }
+        
+        fseek($file, 0);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+        fpassthru($file);
+        exit();
+        }
 }
 
 if(isset($_POST['eJSON'])){
@@ -53,7 +128,7 @@ if(isset($_POST['eJSON'])){
     fwrite($fp, json_encode($json_array));
     fclose($fp);
     header('Content-Type: text/json');
-    header('Content-Disposition: attachment; filename="stoc.json";');
+    header('Content-Disposition: attachment; filename="export.json";');
 
     exit();
 }

@@ -155,6 +155,28 @@ background-color: #105212;
   margin-top: 20px;
   padding: 2%;
 }
+
+.operations{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 2%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.operations a{
+  text-decoration: none;
+  width:fit-content;
+  padding: 14px 16px;
+  color: white;
+  border-radius: 25px;
+  float: right;
+  background-color: green;
+}
+/* .reg{
+  display: flex;
+} */
 @media screen and (max-width: 850px) {
   .container{
     font-size: 10px;
@@ -164,5 +186,11 @@ background-color: #105212;
     display:grid;
     grid-template-columns: 1fr;
     position: relative;
+  }
+
+  .operations{
+    display: grid;
+    align-items: center;
+    padding-left: 40%;
   }
 }
