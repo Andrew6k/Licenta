@@ -156,6 +156,17 @@ background-color: #105212;
   padding: 2%;
 }
 
+.buttons a{
+  text-decoration: none;
+  width:fit-content;
+  padding: 14px 16px; 
+  margin-left: 10px;
+  color: white;
+  border-radius: 25px;
+  float: right;
+  background-color: green;
+}
+
 .operations{
   display: flex;
   justify-content: space-between;

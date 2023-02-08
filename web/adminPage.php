@@ -79,20 +79,13 @@
         // print_r($fields)
     ?>
     <div class="buttons">
-        <h3>Export options</h3>
-        <form action="mypage.php" method="post" >
+        <h3>View tables</h3>
         <?php 
-          if ($isadmin == 1) { ?>
-        <select name="export-select">
-            <option value="Authors">Authors</option>
-            <option value="Publications">Publications</option>
-            <option value="Domains">Domains</option>
-        </select>
-        <?php } ?>
-            <input type="submit" class="btn-submit" name="eCSV" value="Export CSV">
-            <input type="submit" class="btn-submit" name="eJSON" value="Export JSON">
-            <!-- <input type="submit" class="btn-submit" name="ePDF" value="Export PDF"> -->
-        </form>
+         echo "<a href='tables.php?obj=domains'>Domains</a>";
+         echo "<a href='tables.php?obj=publ'>Publications</a>";
+         echo "<a href='tables.php?obj=authors'>Authors</a>";
+        ?>
+            
     </div>
     </div>
 </div>
