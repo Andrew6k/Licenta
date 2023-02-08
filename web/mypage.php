@@ -1,6 +1,7 @@
 <?php
   include('server.php');
-  
+  include('import_export.php');
+
   $mail = $_SESSION['username'];
   $sql = "SELECT id,name, affiliation, email_domain, citations FROM authors WHERE mail='$mail'";
   $result = mysqli_query($mysqli, $sql);
@@ -15,7 +16,8 @@
     
   }    
   
-  $sql = "SELECT domain FROM domains JOIN author_domains ON domains.id = author_domains.domain_id  WHERE author_id = $id";
+  $nr = intval($id);
+  $sql = "SELECT domain FROM domains JOIN author_domains ON domains.id = author_domains.domain_id  WHERE author_id = $nr";
   $result = mysqli_query($mysqli, $sql);
  
   $fields = array();
@@ -107,5 +109,13 @@
         ?>
     </table>
 </div>
+
+<div class="buttons">
+        <form action="mypage.php" method="post" >
+            <input type="submit" class="btn-submit" name="eCSV" value="Export CSV">
+            <input type="submit" class="btn-submit" name="eJSON" value="Export JSON">
+            <input type="submit" class="btn-submit" name="ePDF" value="Export PDF">
+        </form>
+    </div>
 </body>
 </html>

@@ -151,6 +151,10 @@ background-color: #105212;
   table-layout: auto;
 }
 
+.buttons{
+  margin-top: 20px;
+  padding: 2%;
+}
 @media screen and (max-width: 850px) {
   .container{
     font-size: 10px;
