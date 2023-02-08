@@ -1,6 +1,8 @@
 <?php
   include('server.php');
-  
+  // if (empty($_SESSION['username'])) {
+  //   header('location: homepage.php');
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +19,12 @@
   </head>
 <body>
 <div class="nav">
-    <?php if($_SESSION['username']) {
+    <?php if(isset($_SESSION['username'])) {
       $name = $_SESSION['username'];
-      echo "<a href='mypage.php'>$name</a><br>";
+      echo "<a href='logout.php'>Logout</a>";
+      
+      echo "<a href='mypage.php'>$name</a>";
+      
     }else {
       echo "<a href='login.php'>Log in</a><br>";
     }

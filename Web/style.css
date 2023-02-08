@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background-image: url('image.jpg');
+  background-image: url('../img/image.jpg');
   background-size: cover;
   background-repeat: repeat;
   background-position: center center;
@@ -158,7 +158,7 @@ background-color: #105212;
 
   .container-res{
     display:grid;
-    grid-template-columns: 0.1fr 1fr 0.1fr;
+    grid-template-columns: 1fr;
     position: relative;
   }
 }

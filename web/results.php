@@ -17,13 +17,15 @@
   </head>
 <body>
 <div class="nav">
-  <?php if($_SESSION['username']) {
+    <?php if($_SESSION['username']) {
       $name = $_SESSION['username'];
-      echo "<a href='mypage.php'>$name</a><br>";
+      echo "<a href='logout.php'>Logout</a>";
+      echo "<a href='mypage.php'>$name</a>";
     }else {
       echo "<a href='login.php'>Log in</a><br>";
     }
     ?>
+    <a href="homepage.php">Home</a>
 </div>
 <div class="container-res">
       <img src="logo.png" alt="My Logo">

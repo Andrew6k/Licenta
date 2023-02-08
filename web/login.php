@@ -17,6 +17,9 @@ include('server.php');
   </head>
 
 <body>
+<div class="nav">
+    <a href="homepage.php">Home</a>
+</div>
     <div class="background"></div>
     <div class="container">
         <h2>Login Form</h2>
