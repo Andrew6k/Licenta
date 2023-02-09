@@ -6,11 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website scholarly</title>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="data:,">
+   
 </head>
 <body>
+    <div></div>
+    <div id="my_dataviz"></div>
+    <style>
+        .my_dataviz{
+            padding-left:15%;
+        }
+    </style>
     <!-- <svg></svg> -->
     <div id="chart"></div>
+    <svg></svg>
+    </body>
 <?php
 
 include('server.php');
@@ -35,56 +45,6 @@ foreach ($kmeans_result as $k){
 }
 ?>
 
-<script>
-$width = 800;
-$height = 500;
-
-const svg = d3.select('svg');
-svg.append('circle')
-    .attr('r',20);
-var myVariable = <?php echo json_encode($kmeans_result); ?>;
-console.log(myVariable);
-// var svg = d3.select("#chart")
-//             .append("svg")
-//             .attr("width", width)
-//             .attr("height", height);
-
-// var circles = svg.selectAll("circle")
-//                  .data(myVariable)
-//                  .enter()
-//                  .append("circle");
-
-// circles.attr("cx", function(d, i) { return (i + 1) * 50; })
-//        .attr("cy", height / 2)
-//        .attr("r", function(d) { return d * 2; })
-//        .attr("fill", "blue");
-// $svg = d3.select('body')
-//     .append('svg')
-//     .attr('width', $width)
-//     .attr('height', $height);
-
-// $circles = $svg->selectAll('circle')
-//     .data($formatted_data)
-//     .enter()
-//     .append('circle')
-//     .attr('cx', function ($d, $i) use ($width) {
-//         return ($i * $width) / count($formatted_data) + 50;
-//     })
-//     .attr('cy', $height / 2)
-//     .attr('r', function ($d) {
-//         return $d['citations'] / 10;
-//     })
-//     .style('fill', function ($d) {
-//         return d3.schemeCategory10[$d['cluster_id']];
-//     });
-
-//     $circles
-//     .on('mouseover', function ($d) {
-//         d3.select(this)
-//             .style('fill', 'red');
-//     })
-</script>
-
 <!-- <svg> </svg>
 <script>
     var svg = d3.select("svg"),
@@ -92,5 +52,6 @@ console.log(myVariable);
     height = +svg.attr("height");
 
 </script> -->
-</body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="app.js" ></script>
 </html>
