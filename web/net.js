@@ -1,7 +1,7 @@
 
 var authors_publications = [        { author_id: 1, publication_id: 1 },        { author_id: 2, publication_id: 1 },        { author_id: 3, publication_id: 2 },        { author_id: 4, publication_id: 2 },        { author_id: 5, publication_id: 3 }      ];
 
-      // Create the links between authors based on shared publications
+    
       var links = [];
       for (var i = 0; i < authors_publications.length; i++) {
         for (var j = i + 1; j < authors_publications.length; j++) {
@@ -17,43 +17,43 @@ var authors_publications = [        { author_id: 1, publication_id: 1 },        
         }
       }
 
-      // Create the nodes for each author
-      var nodes = [];
-      authors_publications.forEach(function(d) {
-        nodes[d.author_id] = { id: d.author_id };
-      });
+    //   // Create the nodes for each author
+    //   var nodes = [];
+    //   authors_publications.forEach(function(d) {
+    //     nodes[d.author_id] = { id: d.author_id };
+    //   });
 
-      // Set up the simulation
-      var simulation = d3
-        .forceSimulation(nodes)
-        .force("charge", d3.forceManyBody().strength(-300))
-        .force("link", d3.forceLink(links).distance(150))
-        .force("center", d3.forceCenter().x(250).y(250))
-        .on("tick", ticked);
+    //   // Set up the simulation
+    //   var simulation = d3
+    //     .forceSimulation(nodes)
+    //     .force("charge", d3.forceManyBody().strength(-300))
+    //     .force("link", d3.forceLink(links).distance(150))
+    //     .force("center", d3.forceCenter().x(250).y(250))
+    //     .on("tick", ticked);
 
-      // Create the svg to hold the nodes and links
-      var svg = d3
-        .select("body")
-        .append("svg")
-        .attr("width", 500)
-        .attr("height", 500);
+    //   // Create the svg to hold the nodes and links
+    //   var svg = d3
+    //     .select("body")
+    //     .append("svg")
+    //     .attr("width", 500)
+    //     .attr("height", 500);
 
-      // Add the links to the svg
-      var link = svg
-        .selectAll(".link")
-        .data(links)
-        .enter()
-        .append("line")
-        .attr("class", "link");
+    //   // Add the links to the svg
+    //   var link = svg
+    //     .selectAll(".link")
+    //     .data(links)
+    //     .enter()
+    //     .append("line")
+    //     .attr("class", "link");
 
-      // Add the nodes to the svg
-      var node = svg
-        .selectAll(".node")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("class", "node")
-        .attr("r", 15);
+    //   // Add the nodes to the svg
+    //   var node = svg
+    //     .selectAll(".node")
+    //     .data(nodes)
+    //     .enter()
+    //     .append("circle")
+    //     .attr("class", "node")
+    //     .attr("r", 15);
 
 
 
