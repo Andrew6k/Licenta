@@ -1,4 +1,8 @@
+<?php
 
+include('server.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +11,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website scholarly</title>
     <link rel="icon" type="image/x-icon" href="data:,">
-   
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="nav">
+<?php if(isset($_SESSION['username']) and isset($_SESSION['isadmin']) and ($_SESSION['isadmin'] == 0)) {
+      $name = $_SESSION['username'];
+      echo "<a href='logout.php'>Logout</a>";
+      
+      echo "<a href='mypage.php'>$name</a>";
+      
+    }elseif (isset($_SESSION['username']) and isset($_SESSION['isadmin']) and ($_SESSION['isadmin'] == 1)) {
+      $name = $_SESSION['username'];
+      echo "<a href='logout.php'>Logout</a>";
+      
+      echo "<a href='adminPage.php'>$name</a>";
+    }else {
+      echo "<a href='login.php'>Log in</a>";
+    }
+    ?>
+    <a href="homepage.php">Home</a>
+</div>
     <div></div>
     <div id="my_dataviz"></div>
     <style>
@@ -18,12 +40,10 @@
         }
     </style>
     <!-- <svg></svg> -->
-    <div id="chart"></div>
-    <svg></svg>
+    <h4>Clustering graph based on citations</h4>
     </body>
 <?php
 
-include('server.php');
 
 // use Phpml\Clustering\KMeans;
 // use Phpml\Math\Distance\Euclidean;
@@ -41,8 +61,10 @@ $rows=mysqli_fetch_assoc($result);
 $file = file("../demo.txt");
 $kmeans_result = array_map('intval', explode(",", $file[0]));
 foreach ($kmeans_result as $k){
-    echo $k;
+    // echo $k;
 }
+
+// echo "Clustering graph based on citations"
 ?>
 
 <!-- <svg> </svg>

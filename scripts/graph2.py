@@ -1,6 +1,7 @@
 import numpy as np
 import mysql.connector
 import csv
+import json
 # import pickle
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
@@ -30,3 +31,18 @@ print(len(labels))
 f = open("demo.txt", "a")
 for label in labels:
     f.write(str(label)+',')
+
+
+i=0
+allData = []
+for citation in citations:
+    data = {"name": str(citation[0]), "citations": str(citation[1]), "cluster": str(labels[i])}
+    # print(data)
+    i = i + 1
+    allData.append(data)
+
+json_object = json.dumps(allData)
+ 
+# Writing to sample.json
+with open("sample.json", "w") as outfile:
+    outfile.write(json_object)

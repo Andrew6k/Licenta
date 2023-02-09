@@ -1,5 +1,13 @@
 // console.log(d3)
-const data = [
+// var mydata;
+// fetch('../sample.json')
+//     .then((response) => response.json())
+//     .then(data => {
+//         mydata = data;
+//         console.log(mydata);
+//     });
+
+var mydata = [
     { name : 'Breaban', citations: 499, cluster: 2},
     { name : 'Raschip', citations: 201, cluster: 0},
     { name : 'Necula', citations: 126, cluster: 0},
@@ -33,14 +41,14 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-var x = d3.scaleLinear().domain([d3.min(data, function(d){
-            return d.citations;}) - 20,d3.max(data, function(d){return d.citations;})+1])
+var x = d3.scaleLinear().domain([d3.min(mydata, function(d){
+            return d.citations;}) - 20,d3.max(mydata, function(d){return d.citations;})+100])
             .range([0,width]);
         
 var y = d3.scaleBand()
             .range([height, 0])
             .padding(0.8);
-y.domain(data.map(function(d) { return d.name; }));
+y.domain(mydata.map(function(d) { return d.name; }));
         
 var xAxis = d3.axisBottom(x);
 var yAxis = d3.axisLeft(y);
@@ -49,7 +57,7 @@ svg.append("g").attr("transform", "translate(0,"+(height)+ ")").call(xAxis);
 svg.append("g").attr("class","y axis").call(yAxis);
 
 var dots = svg.append("g")
-                .selectAll("dot").data(data);
+                .selectAll("dot").data(mydata);
 dots.enter().append("circle").attr("cx", function(d) { return x(d.citations); })
        .attr("cy", function(d){return y(d.name);})
        .attr("r", 5)
