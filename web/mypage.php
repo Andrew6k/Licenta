@@ -31,6 +31,13 @@
   
 ?>
 
+<script>function score(citations) {
+        var points = 10;
+
+        var score = citations * points;
+
+        return score;
+      }</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,6 +85,18 @@
         } }
         // print_r($fields)
     ?>
+      <p>Score: <span id="score">
+        <script>
+        var score = score(<?php echo $citations; ?>);
+        var scoreClass = "low-score";
+        if (score >= 6000) {
+          scoreClass = "high-score";
+        } else if (score >= 3000) {
+          scoreClass = "medium-score";
+        }
+        document.getElementById("score").className = scoreClass;
+        document.write(score);
+      </script></span></p>
     </div>
 </div>
 

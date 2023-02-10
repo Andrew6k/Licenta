@@ -125,6 +125,27 @@ background-color: #105212;
   font-size: 14px;
   font-style: italic;
 }
+/* .score {
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+} */
+.low-score {
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+}
+.medium-score {
+  font-size: 24px;
+  font-weight: bold;
+  color: orange;
+}
+.high-score {
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+}
+
 .abstract {
   font-size: 16px;
   margin-top: 10px;
@@ -156,9 +177,7 @@ background-color: #105212;
   padding: 2%;
 }
 
-h3{
-  text-align:center;
-}
+
 .buttons a{
   text-decoration: none;
   width:fit-content;
