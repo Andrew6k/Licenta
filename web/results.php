@@ -66,7 +66,7 @@
       $category = $_POST["criteria-select"];
       // echo $category;
       if ($category == "author"){
-        $sql = "SELECT * FROM authors WHERE name like '%$word%'";
+        $sql = "SELECT * FROM authors WHERE name like '%$word%' ORDER BY citations";
         $result=mysqli_query($mysqli,$sql);
           ?>
           <table align="center" border="1px"">
@@ -139,7 +139,7 @@
 
     <?php }elseif ($category == "year"){
       $year = intval($word);
-      $sql = "SELECT * FROM publications WHERE year = '$year'";
+      $sql = "SELECT * FROM publications WHERE year = '$year' ORDER BY citations";
       $result=mysqli_query($mysqli,$sql);
         ?>
         <table align="center" border="1px"">
