@@ -11,24 +11,31 @@ cnx = mysql.connector.connect(host="localhost",
             password="",
             database="scholar")
 cursor = cnx.cursor()
-query = "SELECT  citations FROM authors where citations > 2"
+query = "SELECT  id,citations FROM authors where citations > 2"
 
 cursor.execute(query)
-citations = cursor.fetchall()
+# citations = cursor.fetchall()
 
+citations = np.array(cursor.fetchall())
 
-# Convert the citation data into a numpy array
-citations = np.array(citations)
-
-# Perform k-means clustering on the citation data
-k = 3  # number of clusters
+# Create the k-means model
+k = 3
 kmeans = KMeans(n_clusters=k)
-kmeans.fit(citations)
+kmeans.fit(citations[:,1].reshape(-1,1))
+
+# Predict the cluster for each author
+labels = kmeans.predict(citations[:,1].reshape(-1,1))
+
+# Plot the results
+plt.scatter(citations[:,1], citations[:,0], c=labels)
+plt.xlabel("Citations")
+plt.ylabel("Author ID")
+plt.show()
 
 # Get the cluster labels for each author
-labels = kmeans.labels_
+# labels = kmeans.labels_
 
-print(labels)
+# print(labels)
 
 # Convert the data into a numpy array
 # citations_array = np.array(citations)

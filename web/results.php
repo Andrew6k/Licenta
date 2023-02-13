@@ -139,7 +139,7 @@
 
     <?php }elseif ($category == "year"){
       $year = intval($word);
-      $sql = "SELECT * FROM publications WHERE year = '$year' ORDER BY citations";
+      $sql = "SELECT * FROM publications WHERE year = '$year' ORDER BY citations DESC";
       $result=mysqli_query($mysqli,$sql);
         ?>
         <table align="center" border="1px"">

@@ -55,9 +55,9 @@ else:
     data["domains"] = []
     data["authD"] = []
 
-    authID = {}
+    authID = {} #saves primary key for every author
     domID = {} #saves primary key for every domain
-    pubID = {}
+    pubID = {} #saves primary key for every publications
 
 
     domKeys = []
@@ -79,7 +79,6 @@ else:
         if nr_aut == 15:
             break
         nr_pub = 0
-        # print(author_name)
         search_query = scholarly.search_author(author_name)
         first_author_result = next(search_query)
         time.sleep(1)

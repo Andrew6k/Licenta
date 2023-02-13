@@ -19,9 +19,18 @@ for row in data:
 
 # Create the graph using NetworkX
 G = nx.Graph()
+# Add nodes to the graph
 G.add_edges_from(edges)
-
+# Get the list of all authors and publications
+authors = [node for node, degree in G.degree if degree > 1]
+publications = [node for node, degree in G.degree if degree == 1]
+# Set the color for each node
+node_colors = []
+for node in G.nodes:
+    if node in authors:
+        node_colors.append('red')
+    elif node in publications:
+        node_colors.append('blue')
 # Draw the graph
-nx.draw(G)
-
+nx.draw(G, node_color=node_colors)
 plt.show()
