@@ -16,17 +16,59 @@ except:
 
 else:
     cursor = conn.cursor()
+    cursor.execute("SELECT title, id FROM publications")
 
     pg = ProxyGenerator()
     pg.FreeProxies()
     scholarly.use_proxy(pg)
 
+    results = cursor.fetchall()
+
+    for row in results:
+        value = [row[1]]
+        insert_query = f"""
+                SELECT name from authors join author_publications on author_id = authors.id where publication_id = %s
+                """
+        cursor.execute(insert_query, (row[1],))
+        authors = cursor.fetchall()
+        print(row[0])
+        for author in authors:
+                print(author[0])
+        print("-------")
+        search_query = scholarly.search_pubs(row[0])
+        pub = next(search_query)
+        # # pub_fill = scholarly.fill(pub)
+        print(pub)
+        # cited_by = pub['citedby_url']
+        print(pub['citedby_url'])
+        url = "https://scholar.google.com" + pub["citedby_url"]
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # # Extract the titles and authors of the citing articles from the HTML
+        citing_articles = []
+        for article in soup.find_all('div', {'class': 'gs_r gs_or gs_scl'}):
+            title = article.find('h3', {'class': 'gs_rt'}).text
+            authors = article.find('div', {'class': 'gs_a'}).text.split('-')[0].strip()
+            citing_articles.append({'title': title, 'authors': authors})
+
+        # # Print the titles and authors of the citing articles
+        for article in citing_articles:
+            print(f"Title: {article['title']}")
+            print(f"Authors: {article['authors']}")
+
+    cursor.close()
+    conn.close()
+    
+
+    ##################
     publication = "Revealing Lung Affections from CTs. A Comparative"
     search_query = scholarly.search_pubs(publication)
     pub = next(search_query)
     # # pub_fill = scholarly.fill(pub)
     print(pub)
-    # cited_by = pub['citedby']
+    # cited_by = pub['citedby_url']
+    print(pub['citedby_url'])
     # search_query = scholarly.search_pubs(cited_by)
     # cited_by = next(search_query)
     # print(cited_by)
@@ -34,19 +76,20 @@ else:
     #     print("Title:", citation['bib']['title'])
     #     print("Authors:", citation['bib']['author'])
 
-    pub_url = "https://scholar.google.com/scholar?cites=13422781568225188885&as_sdt=2005&sciodt=0,5&hl=ro"
-    # Send a GET request to the URL and parse the HTML with Beautiful Soup
-    response = requests.get(pub_url)
+    url = "https://scholar.google.com" + pub["citedby_url"]
+    # pub_url = "https://scholar.google.com/scholar?cites=13422781568225188885&as_sdt=2005&sciodt=0,5&hl=ro"
+    # # Send a GET request to the URL and parse the HTML with Beautiful Soup
+    response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    # Extract the titles and authors of the citing articles from the HTML
+    # # Extract the titles and authors of the citing articles from the HTML
     citing_articles = []
     for article in soup.find_all('div', {'class': 'gs_r gs_or gs_scl'}):
         title = article.find('h3', {'class': 'gs_rt'}).text
         authors = article.find('div', {'class': 'gs_a'}).text.split('-')[0].strip()
         citing_articles.append({'title': title, 'authors': authors})
 
-    # Print the titles and authors of the citing articles
+    # # Print the titles and authors of the citing articles
     for article in citing_articles:
         print(f"Title: {article['title']}")
         print(f"Authors: {article['authors']}")
