@@ -54,50 +54,60 @@
 # dec = fernet.decrypt(enc).decode()
 # print(dec)
 
-# import mysql.connector
+import mysql.connector
 
 
-# try:
-#         conn = mysql.connector.connect(
-#             host="localhost",
-#             user="root",
-#             password="",
-#             database="scholar"
-#             )
-# except:
-#         print("Database not available!")
-# else:
-#         cursor = conn.cursor()
-#         cursor.execute("SELECT name, id FROM authors")
+try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="scholar"
+            )
+except:
+        print("Database not available!")
+else:
+        cursor = conn.cursor()
+        # sql = "SELECT name from authors"
+        cursor.execute("SELECT title, id FROM publications")
 
 #         # Fetch the first row of the result set
-#         results = cursor.fetchall()
+        results = cursor.fetchall()
 
 #         # Print the first row
-#         for row in results:
-#             print(row[0])
+        for row in results:
+            value = [row[1]]
+            insert_query = f"""
+                    SELECT name from authors join author_publications on author_id = authors.id where publication_id = %s
+                    """
+            cursor.execute(insert_query, (row[1],))
+            authors = cursor.fetchall()
+            print(row[0])
+            for author in authors:
+                   print(author[0])
+            print("-------")
 
 #         # Close the cursor and connection
-#         cursor.close()
-#         conn.close()
+        cursor.close()
+        conn.close()
 # import sys
 # sys.argv[1] = sys.argv[1].replace('-',' ')
 # print(sys.argv[1])
 
 
 
-data = {}
-data["authors"] = []
-data["pub"] = []
-data["domains"] = []
-data["authD"] = []
+# data = {}
+# data["authors"] = []
+# data["pub"] = []
+# data["domains"] = []
+# data["authD"] = []
 
-with open("output.txt", "r") as f:
-    # Iterate over the lines of the file
-    for line_number, line in enumerate(f, start=1):
-        # Check if the string is present in the line
-        if "" in line:
-            print("Search string found in line", line_number, ":", line.strip())
+# with open("output.txt", "r") as f:
+#     # Iterate over the lines of the file
+#     for line_number, line in enumerate(f, start=1):
+#         # Check if the string is present in the line
+#         if "" in line:
+#             print("Search string found in line", line_number, ":", line.strip())
             
-    else:
-        print("Search string not found in file.")
+#     else:
+#         print("Search string not found in file.")
