@@ -3,6 +3,7 @@ from scholarly import ProxyGenerator
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
+import re
 
 try:
     conn = mysql.connector.connect(
@@ -27,13 +28,21 @@ else:
     for row in results:
         value = [row[1]]
         insert_query = f"""
-                SELECT name from authors join author_publications on author_id = authors.id where publication_id = %s
+                SELECT name, id from authors join author_publications on author_id = authors.id where publication_id = %s
                 """
         cursor.execute(insert_query, (row[1],))
         authors = cursor.fetchall()
         print(row[0])
+
+        id_authors = {}
+        authors_list = []
+        
         for author in authors:
                 print(author[0])
+                authors_list.append(author[0])
+                id_authors[author[0]] = author[1]
+
+        # print(authors_list)
         print("-------")
         search_query = scholarly.search_pubs(row[0])
         pub = next(search_query)
@@ -50,12 +59,59 @@ else:
         for article in soup.find_all('div', {'class': 'gs_r gs_or gs_scl'}):
             title = article.find('h3', {'class': 'gs_rt'}).text
             authors = article.find('div', {'class': 'gs_a'}).text.split('-')[0].strip()
-            citing_articles.append({'title': title, 'authors': authors})
+            a_tag = article.find('a', href = True)['href']
+            citing_articles.append({'title': title, 'authors': authors, 'link': a_tag})
 
         # # Print the titles and authors of the citing articles
         for article in citing_articles:
             print(f"Title: {article['title']}")
             print(f"Authors: {article['authors']}")
+            values = (article["title"], article["link"], row[1])
+
+            insert_query = f"""
+            INSERT INTO citations (title, link, publication_id)
+            VALUES {values}
+            """
+
+            cursor.execute(insert_query)
+
+            citation_id = cursor.lastrowid
+
+            direct_authors = []
+            indirect_authors = []
+
+            citations_authors = article['authors'].split(",")
+
+            ok = 0
+            for aut in authors_list:
+                if aut in citations_authors:
+                    ok = 1
+                    direct_authors.append(aut)
+            if ok == 1:
+                for aut in authors_list:
+                    if aut not in direct_authors:
+                        indirect_authors.append(aut)
+
+                for aut in direct_authors:
+                    values = (id_authors[aut], citation_id, "Direct")
+
+                    insert_query = f"""
+                    INSERT INTO author_citations (author_id, citation_id, type)
+                    VALUES {values}
+                    """
+                    cursor.execute(insert_query)
+
+                for aut in indirect_authors:
+                    values = (id_authors[aut], citation_id, "Indirect")
+
+                    insert_query = f"""
+                    INSERT INTO author_citations (author_id, citation_id, type)
+                    VALUES {values}
+                    """
+                    cursor.execute(insert_query)
+
+            # print(citations_authors)
+        conn.commit()
 
     cursor.close()
     conn.close()
@@ -86,6 +142,7 @@ else:
     citing_articles = []
     for article in soup.find_all('div', {'class': 'gs_r gs_or gs_scl'}):
         title = article.find('h3', {'class': 'gs_rt'}).text
+        title = re.sub(r'\[.*?\]', '', title)
         authors = article.find('div', {'class': 'gs_a'}).text.split('-')[0].strip()
         citing_articles.append({'title': title, 'authors': authors})
 

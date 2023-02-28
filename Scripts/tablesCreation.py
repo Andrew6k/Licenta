@@ -29,7 +29,6 @@ CREATE TABLE authors (
     isadmin BOOLEAN DEFAULT 0
 )
 """
-
 cursor.execute(table_create)
 conn.commit()
 
@@ -57,7 +56,6 @@ CREATE TABLE author_publications (
     FOREIGN KEY (publication_id) REFERENCES publications(id)
 )
 """
-
 cursor.execute(table_create)
 conn.commit()
 
@@ -84,6 +82,31 @@ CREATE TABLE author_domains (
 
 cursor.execute(table_create)
 conn.commit()
+
+
+table_create = """
+CREATE TABLE citations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    link VARCHAR(255),
+    FOREIGN KEY (publication_id) REFERENCES publications(id)
+)
+"""
+
+table_create = """
+CREATE TABLE author_citations (
+    author_id INT,
+    citation_id INT,
+    type VARCHAR(20),
+    PRIMARY KEY (author_id, citation_id),
+    FOREIGN KEY (author_id) REFERENCES authors(id),
+    FOREIGN KEY (citation_id) REFERENCES citations(id)
+)
+"""
+
+cursor.execute(table_create)
+conn.commit()
+
 
 cursor.close()
 conn.close()

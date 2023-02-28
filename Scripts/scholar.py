@@ -91,12 +91,10 @@ else:
         mail = author["name"].lower().replace(" ",".")
         password, fernet = get_pass()
 
-        if ((author["name"] not in data["authD"]) and nr_aut <15): #se reseteaza la run
+        if ((author["name"] not in data["authD"]) and nr_aut <15): 
             nr_aut += 1
-            values = (author["name"], author["affiliation"], author["email_domain"], int(author["citedby"]), mail, fernet.decrypt(password).decode())
-
-            # with open("output.txt", "a") as file:
-            #     file.write(author["name"] + "\n")
+            values = (author["name"], author["affiliation"], author["email_domain"],
+             int(author["citedby"]), mail, fernet.decrypt(password).decode())
 
             insert_query = f"""
             INSERT INTO authors (name, affiliation, email_domain, citations, mail, password)
@@ -104,7 +102,11 @@ else:
             """
 
             cursor.execute(insert_query)
+
             # conn.commit()
+            # with open("output.txt", "a") as file:
+            #     file.write(author["name"] + "\n")
+
             data["authD"].append(author["name"]) 
             id1 = cursor.lastrowid
             authID[author["name"]] = id1
@@ -144,7 +146,9 @@ else:
             if nr_pub >= 15:
                 break
             pub = article
-            if ((int(pub['num_citations'])>= 2) and ('pub_year' in pub['bib']) and (int(pub['bib']['pub_year']) >= 2010)): #here
+            if ((int(pub['num_citations'])>= 2) and 
+            ('pub_year' in pub['bib']) and 
+            (int(pub['bib']['pub_year']) >= 2010)): 
                 print(nr_pub)
                 nr_pub += 1
                 time.sleep(2)

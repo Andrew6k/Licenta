@@ -1,4 +1,4 @@
-# import re
+import re
 
 # str = '2015 IEEE 27th International Conference on Tools with Artificial, 1-13'
 # str = str.replace('-','')
@@ -83,8 +83,11 @@ else:
             cursor.execute(insert_query, (row[1],))
             authors = cursor.fetchall()
             print(row[0])
+            authors_list = []
             for author in authors:
                    print(author[0])
+                   authors_list.append(author[0])
+            print(authors_list)
             print("-------")
 
 #         # Close the cursor and connection
