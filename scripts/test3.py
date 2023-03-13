@@ -12,9 +12,11 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 # Set the URL for the Google Scholar search results page for the publication
-pub_url = "https://scholar.google.com/scholar?oi=bibs&hl=ro&cites=14469474580644534157&start={}"
+pub_url = "https://scholar.google.com/scholar?oi=bibs&hl=ro&cites=9585241703402995044&start={}"
 # url = 'https://scholar.google.com/citations?user=YOUR_USER_ID_HERE&hl=en&cstart={}&pagesize=100'
 
+authors_list = ["Breaban","Iftene","Alboaie"]
+id_authors = {"Breaban": 125, "Iftene":132, "Alboaie":129}
 start = 0
 
 while True:
@@ -39,7 +41,65 @@ while True:
         print(f"Title: {article['title']}")
         print(f"Authors: {article['authors']}")
         print(f"Link: {article['link']}")
-        values = (article["title"], article["link"], "6")
+        values = (article["title"], article["link"], "10")
+
+        if start < 10:
+            insert_query = f"""
+                INSERT INTO citations (title, link, publication_id)
+                VALUES {values}
+                """
+
+            cursor.execute(insert_query)
+
+            citation_id = cursor.lastrowid
+
+        direct_authors = []
+        indirect_authors = []
+
+        
+        citations_authors = article['authors'].split(",")
+
+        ok = 0
+        for aut in authors_list:
+            for aut2 in citations_authors:
+                if aut in aut2:
+                    ok = 1
+                    direct_authors.append(aut)
+        if ok == 1:
+            for aut in authors_list:
+                if aut not in direct_authors:
+                    indirect_authors.append(aut)
+            print("--------")
+            print(direct_authors)
+            print(indirect_authors)
+            
+            if start >= 10:
+                insert_query = f"""
+                    INSERT INTO citations (title, link, publication_id)
+                    VALUES {values}
+                    """
+
+                cursor.execute(insert_query)
+
+                citation_id = cursor.lastrowid
+
+            for aut in direct_authors:
+                    values = (id_authors[aut], citation_id, "Direct")
+
+                    insert_query = f"""
+                    INSERT INTO author_citations (author_id, citation_id, type)
+                    VALUES {values}
+                    """
+                    cursor.execute(insert_query)
+
+            for aut in indirect_authors:
+                    values = (id_authors[aut], citation_id, "Indirect")
+
+                    insert_query = f"""
+                    INSERT INTO author_citations (author_id, citation_id, type)
+                    VALUES {values}
+                    """
+                    cursor.execute(insert_query)
     # if start > 90:
     #     break
     start += 10
@@ -49,7 +109,7 @@ while True:
     # """
 
 #     cursor.execute(insert_query)
-# conn.commit()
+    conn.commit()
 
 cursor.close()
 conn.close()
