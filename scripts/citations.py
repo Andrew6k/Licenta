@@ -50,8 +50,9 @@ else:
         print(pub)
         # cited_by = pub['citedby_url']
         print(pub['citedby_url'])
-        url = "https://scholar.google.com" + pub["citedby_url"]
-        response = requests.get(url)
+        url = "https://scholar.google.com" + pub["citedby_url"] + "&start={}"
+        start = 0
+        response = requests.get(url.format(start))
         soup = BeautifulSoup(response.content, 'html.parser')
 
         # # Extract the titles and authors of the citing articles from the HTML
@@ -62,20 +63,24 @@ else:
             a_tag = article.find('a', href = True)['href']
             citing_articles.append({'title': title, 'authors': authors, 'link': a_tag})
 
+        if not citing_articles:
+            break
+
         # # Print the titles and authors of the citing articles
         for article in citing_articles:
             print(f"Title: {article['title']}")
             print(f"Authors: {article['authors']}")
             values = (article["title"], article["link"], row[1])
 
-            insert_query = f"""
-            INSERT INTO citations (title, link, publication_id)
-            VALUES {values}
-            """
+            if start < 10:
+                insert_query = f"""
+                INSERT INTO citations (title, link, publication_id)
+                VALUES {values}
+                """
 
-            cursor.execute(insert_query)
+                cursor.execute(insert_query)
 
-            citation_id = cursor.lastrowid
+                citation_id = cursor.lastrowid
 
             direct_authors = []
             indirect_authors = []
@@ -91,6 +96,16 @@ else:
                 for aut in authors_list:
                     if aut not in direct_authors:
                         indirect_authors.append(aut)
+
+                if start >= 10:
+                    insert_query = f"""
+                    INSERT INTO citations (title, link, publication_id)
+                    VALUES {values}
+                    """
+
+                cursor.execute(insert_query)
+
+                citation_id = cursor.lastrowid
 
                 for aut in direct_authors:
                     values = (id_authors[aut], citation_id, "Direct")
@@ -111,6 +126,7 @@ else:
                     cursor.execute(insert_query)
 
             # print(citations_authors)
+        start += 10
         conn.commit()
 
     cursor.close()
