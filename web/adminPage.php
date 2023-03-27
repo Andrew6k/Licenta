@@ -104,5 +104,31 @@
         <a href="graph.php">Citations graph</a>
     </div>
   </div>
+<div class="delete-author">
+<form method="post" action="delete-author.php">
+  <label for="author_id"><strong>Select an author to delete:</strong></label>
+  <select name="author_id" id="author_id">
+    <?php
+      $authors_query = "SELECT * FROM authors";
+      $authors_result = mysqli_query($mysqli, $authors_query);
+      $authors = mysqli_fetch_all($authors_result, MYSQLI_ASSOC);
+      
+      // Generate the HTML for the dropdown list
+      foreach ($authors as $author) {
+        echo '<option value="' . $author['id'] . '">' . $author['name'] . '</option>';
+      }
+    ?>
+  </select>
+  <input type="submit" value="Delete Author">
+</form>
+<?php
+// Retrieve the message from the cookie
+if(isset($_COOKIE['message'])){
+  $message = $_COOKIE['message'];
+  // Clear the cookie
+  setcookie('message', '', time() - 3600); // expires in the past
+  echo "<h4>$message</h4>";}
+?>
+</div>
 </body>
 </html>

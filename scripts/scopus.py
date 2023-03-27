@@ -1,14 +1,16 @@
 import requests
+import os
+# from scopus.scopus_search import ScopusSearch
 
 # Specify the API endpoint URL
-url = 'https://api.elsevier.com/content/search/scopus'
+url = 'https://api.elsevier.com/content/search/author'
 
 # Specify your API key
-api_key = '4c0e89787f93c4ada1a98c82478950d3'
-
+# os.environ['SCOPUS_API_KEY']  = '4c0e89787f93c4ada1a98c82478950d3'
+api_key = '12c5539128f88fab9d2f2f1a5e532b5a'
 # Specify the search query
 
-query = 'AUTHLASTNAME("Breaban") AND AUTHFIRST("Mihaela Elena")'
+query = 'AUTHOR-NAME(Breaban Mihaela Elena)'
 # query = 'TITLE-ABS-KEY("computer networks")'
 
 # Specify the number of results to retrieve
@@ -22,3 +24,16 @@ results = response.json()
 
 # Extract information from the results...
 print(results)
+
+
+
+
+
+
+
+
+
+# results = ScopusSearch(query)
+
+# Print the results
+# print(results.results)

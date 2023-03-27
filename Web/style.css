@@ -207,6 +207,13 @@ background-color: #105212;
   float: right;
   background-color: green;
 }
+.delete-author {
+  padding: 2%;
+  display: inline;
+}
+.delete-author h4{
+  padding-top: 5px;
+}
 /* .reg{
   display: flex;
 } */
