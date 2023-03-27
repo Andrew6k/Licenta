@@ -30,6 +30,7 @@
 				$_SESSION['username']=$username;
 				$_SESSION['success']="You are now logged in";
 				$_SESSION['isadmin']=$isadmin;
+				$_SESSION['auth_id'] = $id;
 				$mail = $_SESSION['username'];
 				$sql = "SELECT isadmin from authors where mail like '$mail'";
 				$rez = mysqli_query($mysqli,$sql);

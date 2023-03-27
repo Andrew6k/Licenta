@@ -129,7 +129,9 @@
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
-                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
+                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";
+                  echo "<a href='editPublications.php?id=$id'>Edit</a>";
+                ?></td>
             </tr>
             <?php
         } 
