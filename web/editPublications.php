@@ -6,6 +6,20 @@
     $result = mysqli_query($mysqli, $sql);
     $author = mysqli_fetch_assoc($result);
 
+    $id = $_GET["id"];
+    $sql = "SELECT * FROM publications WHERE id=$id";
+    $result = mysqli_query($mysqli, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+      $row = mysqli_fetch_assoc($result);
+      $title = $row["title"];
+      $year = $row["year"];
+      $conference = $row["conference"];
+      $summary = $row["summary"];
+      $citations = $row["citations"];
+      $link = $row["link"];
+    } 
+
 // Display the form for editing the author's information
 ?>
 <!DOCTYPE html>
