@@ -1,18 +1,55 @@
+body {
+  font-family: Arial, sans-serif;
+  /* text-align: center; */
+  background-image: url('../img/image.jpg');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center center;
+  /* height: 100vh; */
+}
+
+.nav{
+  text-align: right;
+  list-style-type: none;
+  /* margin: 0px; */
+  padding: 0px;
+  padding: 10px 30px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  /* background-color: rgb(222, 189, 147); */
+}
+.nav a{
+text-decoration: none;
+width:fit-content;
+padding: 14px 16px;
+margin-left: 10px;
+color: white;
+/* display: block; */
+border-radius: 25px;
+float: right;
+background-color: rgb(24, 83, 99);
+}
+
+.nav a:hover{
+background-color: #052734;
+}
+
 form {
     max-width: 500px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px dashed #2c2b2b;
     border-radius: 5px;
   }
   
   label {
     display: block;
+    margin-top: 10px;
     margin-bottom: 10px;
   }
   
   input[type="text"], input[type="email"], textarea {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -30,4 +67,9 @@ form {
   
   input[type="submit"]:hover {
     background-color: #0077B5;
+  }
+
+  .msj{
+    display: flex;
+    justify-content: center;
   }
