@@ -12,11 +12,11 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 # Set the URL for the Google Scholar search results page for the publication
-pub_url = "https://scholar.google.com/scholar?oi=bibs&hl=ro&cites=12587766284320265326&start={}"
+pub_url = "https://scholar.google.com/scholar?oi=bibs&hl=ro&cites=6365733291957784243&start={}"
 # url = 'https://scholar.google.com/citations?user=YOUR_USER_ID_HERE&hl=en&cstart={}&pagesize=100'
 
-authors_list = ["Iftene"]
-id_authors = {"Iftene":132}
+authors_list = ["Buraga"]
+id_authors = {"Buraga":134}
 # authors_list = ["Breaban"]
 # id_authors = {"Breaban": 125}
 start = 0
@@ -43,7 +43,7 @@ while True:
         print(f"Title: {article['title']}")
         print(f"Authors: {article['authors']}")
         print(f"Link: {article['link']}")
-        values = (article["title"], article["link"], "75")
+        values = (article["title"], article["link"], "80")
 
         if start < 10:
             insert_query = f"""

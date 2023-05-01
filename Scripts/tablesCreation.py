@@ -83,6 +83,22 @@ CREATE TABLE author_domains (
 cursor.execute(table_create)
 conn.commit()
 
+table_create = """
+CREATE TABLE conferences (
+    nr_reg INT,
+    title VARCHAR(255),
+    acronym VARCHAR(255),
+    year VARCHAR(20),
+    rank VARCHAR(20),
+    hasData VARCHAR(20),
+    primary_for INT,
+    comments VARCHAR(20),
+    avg_rating VARCHAR(20)
+)
+"""
+cursor.execute(table_create)
+conn.commit()
+
 
 table_create = """
 CREATE TABLE citations (
