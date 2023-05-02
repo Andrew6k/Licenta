@@ -103,12 +103,12 @@
 <div class="articles">
     <?php 
       $nr = intval($id);
-      $sql = "SELECT id, title, conference, year, citations, link FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
+      $sql = "SELECT id, title, conference, year, citations, link, rank FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
       $result=mysqli_query($mysqli,$sql);
         ?>
         <table align="center" border="1px"">
         <tr>
-            <th colspan="5"><h2 style="text-align: center;">Publications</h2></th>
+            <th colspan="6"><h2 style="text-align: center;">Publications</h2></th>
         </tr>
 
         <t>
@@ -116,6 +116,7 @@
             <th>Conference</th>
             <th>Year</th>
             <th>Citations</th>
+            <th>Rank</th>
             <th>Link</th>
         </t>
         <?php
@@ -129,6 +130,7 @@
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
+                <td><?php echo $rows['rank']; ?></td>
                 <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";
                   echo "<a href='editPublications.php?id=$id'>Edit</a>";
                 ?></td>

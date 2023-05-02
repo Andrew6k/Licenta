@@ -18,6 +18,7 @@
       $summary = $row["summary"];
       $citations = $row["citations"];
       $link = $row["link"];
+      $rank = $row['rank'];
     } 
 
 // Display the form for editing the author's information
@@ -59,7 +60,16 @@
   <input type="text" id="publication_conference" name="publication_conference" value="<?php echo $conference; ?>">
   <label for="citation_count">Citation Count:</label>
   <input type="number" id="citation_count" name="citation_count" value="<?php echo htmlspecialchars($citations); ?>">
-  <input type="submit" value="Save">
+  <label for="rank_publication">Publication Rank:</label>
+  <select name="rank_pub" id="rank_pub">
+    <option value="A*" <?php if ($rank == "A*") {echo "selected";} ?>>A*</option>
+    <option value="A" <?php if ($rank == "A") {echo "selected";} ?>>A</option>
+    <option value="B" <?php if ($rank == "B") {echo "selected";} ?>>B</option>
+    <option value="C" <?php if ($rank == "C") {echo "selected";} ?>>C</option>
+    <option value="D" <?php if ($rank == "D") {echo "selected";} ?>>D</option>
+  </select>
+  <input  type="submit" value="Save" class="mySave">
+  
 </form>
 <div class="msj">
   <?php if (isset($_SESSION['messageUp'])) {
