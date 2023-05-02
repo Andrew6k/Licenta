@@ -10,7 +10,7 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-sql = "SELECT id, conference, year, rank FROM publications"
+sql = "SELECT id, conference, year, rank FROM publications WHERE rank = 'D'"
 cursor.execute(sql)
 
 publications = cursor.fetchall()
@@ -21,19 +21,36 @@ for pub in publications:
     year = pub[2]
     rank = pub[3]
     match = re.search('\((.*?)\)', conference)
-    if not match:
-        continue
-    acr = match.group(1)
+    if match:
+        acr = match.group(1)
+    
     print("Publication id: " + str(id))
     print("Publication conference: " + conference)
     print(year)
     print(rank)
 
-    acrDB = "SELECT acronym from conferences WHERE acronym = %s"
-    cursor.execute(acrDB,(acr,))
-    resAcr = cursor.fetchall()
-    if not resAcr:
+    titleDB = "SELECT acronym from conferences where title = %s"
+    cursor.execute(titleDB,(pub[1],))
+    resTitle = cursor.fetchall()
+
+    if not resTitle:
+        if match:
+            acrDB = "SELECT acronym from conferences WHERE acronym = %s"
+            cursor.execute(acrDB,(acr,))
+            resAcr = cursor.fetchall()
+
+            if not resAcr:
+                continue
+
+    # if not resTitle:
+    #     if not resAcr:
+    #         continue
+
+    if not resTitle:
         continue
+    if resTitle:
+        acr = resTitle[0][0]
+        print("Update" + acr)
 
     print("Found")
     print(acr)
