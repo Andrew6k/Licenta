@@ -99,6 +99,16 @@ CREATE TABLE conferences (
 cursor.execute(table_create)
 conn.commit()
 
+# ALTER TABLE conferences ADD COLUMN rank_value INT;
+# UPDATE conferences SET rank_value = 
+# CASE 
+#     WHEN rank = 'A*' THEN 10 
+#     WHEN rank = 'A' THEN 9 
+#     WHEN rank = 'B' THEN 8 
+#     WHEN rank = 'C' THEN 7 
+#     WHEN rank = 'D' THEN 6 
+#     ELSE '0' 
+# END;
 
 table_create = """
 CREATE TABLE citations (
