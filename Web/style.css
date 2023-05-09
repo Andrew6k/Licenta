@@ -177,7 +177,11 @@ background-color: #105212;
   padding: 2%;
 }
 
+.butOp{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 
+}
 .buttons a{
   text-decoration: none;
   width:fit-content;

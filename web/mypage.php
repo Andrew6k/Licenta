@@ -144,12 +144,24 @@
 
 <div class="operations">
 <div class="buttons">
+        <div class="butOp">
+        <div class="butOp1">
         <h3>Export options</h3>
         <form action="mypage.php" method="post" >
             <input type="submit" class="btn-submit" name="eCSV" value="Export CSV">
             <input type="submit" class="btn-submit" name="eJSON" value="Export JSON">
             <!-- <input type="submit" class="btn-submit" name="ePDF" value="Export PDF"> -->
         </form>
+        </div>
+        <h3></h3>
+        <div class="butOp2">
+        <h3>Update database</h3>
+    
+        <form action="updatePubs.php" method="post">
+            <input type="submit" class="btn-submit" name="updatedb" value="Update">
+        </form>
+        </div>
+        </div>
     </div>
   </div>
 </body>
