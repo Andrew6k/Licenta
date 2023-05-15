@@ -32,6 +32,8 @@ else:
     search_query = scholarly.search_author(nameA)
     author = scholarly.fill(next(search_query),sections=['publications'])
 
+    updateQ = "UPDATE authors SET citations = %s WHERE id = %s"
+    cursor.execute(updateQ, (author['citedby'],))
     
     # print([pub['bib']['title'] for pub in author['publications']])
     # ['bib']['pub_year'] / ['num_citations']
@@ -40,6 +42,7 @@ else:
 
     newPub = {}
 
+    #update nr of citations
     rows = cursor.fetchall()
     for row in rows:
         title = row[0]
@@ -54,6 +57,11 @@ else:
                 newPub[pub['bib']['title']] = pub['bib']['pub_year']
         conn.commit()
     print(newPub)
+
+    # for pub in author['publications']:
+    #     if pub['bib']['title'] in newPub:
+    # insert in db, search authors, search citations using https://scholar.google.com/scholar?cites=id - cites_id
+
     #     id = row[0]
     #     name = row[1]
 
