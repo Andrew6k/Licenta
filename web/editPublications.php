@@ -78,5 +78,61 @@
           }?>
  </div>
 </div>
+<div class="similar">
+  <?php
+  $startPosition = strpos($conference, "conference on");
+    // Extract the substring after "conference on"
+  if ($startPosition !== false) {
+      $substring = substr($conference, $startPosition + strlen("conference on"));
+      $substring = trim($substring); // Remove leading/trailing whitespace if needed
+
+  // Output the extracted substring
+      // echo $substring;
+      $publicationWords = explode(" ", $substring);
+      $matchingConferences = array();
+
+      foreach ($publicationWords as $word) {
+        if($word == "and")
+            continue;
+        // Search for conferences/journals with names containing the word
+        $sql = "SELECT title, rank FROM conferences WHERE title LIKE '% " . $word . " %'";
+        $result=mysqli_query($mysqli,$sql);
+        
+    
+        // Fetch the matching conferences/journals
+        while($rows=mysqli_fetch_assoc($result)){
+          // $matchingConferences[] = $rows["title"] . " " . $rows["rank"];
+          $matchingConferences[$rows["title"]] = $rows["rank"];
+        }
+        // if ($result->num_rows > 0) {
+        //     while ($row = $result->fetch_assoc()) {
+        //         $matchingConferences[] = $row["title"] + " " + $row["rank"];
+        //     }
+        // }
+      }
+
+      // $unique = array_unique($matchingConferences);
+      // $html = "<ul>";
+      // foreach ($matchingConferences as $conference) {
+      //     $html .= "<li>" . $conference . "</li>";
+      // }
+      // $html .= "</ul>";
+
+      // echo $html;
+    }
+  ?>
+  <div class="scroll-container">
+  <table>
+    <?php
+          foreach($matchingConferences as $key => $val)
+          {  
+    ?>
+    <tr>
+        <td><?php echo $key; ?></td>
+        <td><?php echo $val; }?></td>
+    </tr>
+  </table>
+  </div>
+</div>
   </body>
 </html>

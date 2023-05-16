@@ -85,3 +85,18 @@ form {
   .mySave {
     margin-left: 66% !important;
   }
+
+  .similar{
+    display: flex;
+    justify-content: center;
+    margin:auto;
+    padding-top: 3%;
+  }
+  .scroll-container {
+    border: 1px dashed #2c2b2b;
+    border-radius: 5px;
+    height: 110px; 
+    width: 50%;
+    overflow-y: scroll; 
+  }
+  
