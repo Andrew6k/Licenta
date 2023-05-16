@@ -80,9 +80,11 @@
 </div>
 <div class="similar">
   <?php
-  $startPosition = strpos($conference, "conference on");
+  $startPosition = strpos(strtolower($conference), "conference on");
+  $ok = 0;
     // Extract the substring after "conference on"
   if ($startPosition !== false) {
+      $ok = 1;
       $substring = substr($conference, $startPosition + strlen("conference on"));
       $substring = trim($substring); // Remove leading/trailing whitespace if needed
 
@@ -122,8 +124,10 @@
     }
   ?>
   <div class="scroll-container">
-  <table>
     <?php
+      if($ok == 1){ ?>
+        <table>
+        <?php
           foreach($matchingConferences as $key => $val)
           {  
     ?>
@@ -131,7 +135,8 @@
         <td><?php echo $key; ?></td>
         <td><?php echo $val; }?></td>
     </tr>
-  </table>
+    </table>
+    <?php } ?>
   </div>
 </div>
   </body>
