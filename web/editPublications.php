@@ -93,25 +93,42 @@
       $publicationWords = explode(" ", $substring);
       $matchingConferences = array();
 
-      foreach ($publicationWords as $word) {
+      $sql = "SELECT title, rank FROM conferences WHERE ";
+      foreach ($publicationWords as $index => $word) {
         if($word == "and")
             continue;
         // Search for conferences/journals with names containing the word
-        $sql = "SELECT title, rank FROM conferences WHERE title LIKE '% " . $word . " %'";
-        $result=mysqli_query($mysqli,$sql);
-        
-    
-        // Fetch the matching conferences/journals
-        while($rows=mysqli_fetch_assoc($result)){
-          // $matchingConferences[] = $rows["title"] . " " . $rows["rank"];
-          $matchingConferences[$rows["title"]] = $rows["rank"];
+        $sql .= "title LIKE '% " . $word . " %'";
+        if ($index < count($publicationWords) - 1) {
+          $sql .= " OR ";
         }
+
+      }
+      
+      $sql .= " ORDER BY (";
+
+      foreach ($publicationWords as $index => $word) {
+          $sql .= "CASE WHEN title LIKE '%$word%' THEN 1 ELSE 0 END";
+          if ($index < count($publicationWords) - 1) {
+            $sql .= " + ";
+        }
+      }
+
+      $sql .= ") DESC";
+
+      $result=mysqli_query($mysqli,$sql);
+        // Fetch the matching conferences/journals
+      while($rows=mysqli_fetch_assoc($result)){
+        // $matchingConferences[] = $rows["title"] . " " . $rows["rank"];
+        $matchingConferences[$rows["title"]] = $rows["rank"];
+      }
+      //if it returns 0 rows => check journals
         // if ($result->num_rows > 0) {
         //     while ($row = $result->fetch_assoc()) {
         //         $matchingConferences[] = $row["title"] + " " + $row["rank"];
         //     }
         // }
-      }
+      
 
       // $unique = array_unique($matchingConferences);
       // $html = "<ul>";

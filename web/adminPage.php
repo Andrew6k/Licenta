@@ -130,5 +130,17 @@ if(isset($_COOKIE['message'])){
   echo "<h4>$message</h4>";}
 ?>
 </div>
+
+<div class="buttons-import">
+        <form action="adminPage.php" method="post" enctype="multipart/form-data">
+            <input type="file" class="btn-submit" name="file" accept=".csv">
+            <select name="table-select" id="table-select">
+              <option value="">Choose a table</option>
+              <option value="journals">Journals</option>
+              <option value="conferences">Conferences</option>
+            </select>
+            <input type="submit" class="btn-submit" name="iCSV" value="Import CSV">
+        </form>
+    </div>
 </body>
 </html>
