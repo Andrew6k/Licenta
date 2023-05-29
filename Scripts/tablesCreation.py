@@ -99,6 +99,20 @@ CREATE TABLE conferences (
 cursor.execute(table_create)
 conn.commit()
 
+table_create = """
+CREATE TABLE journals (
+    title VARCHAR(255),
+    ISSN VARCHAR(20),
+    eISSN VARCHAR(20),
+    subdomeniu VARCHAR(255),
+    rank VARCHAR(20),
+    Loc in zona INT,
+    year VARCHAR(20),
+    type VARCHAR(20)
+)
+"""
+cursor.execute(table_create)
+conn.commit()
 # ALTER TABLE conferences ADD COLUMN rank_value INT;
 # UPDATE conferences SET rank_value = 
 # CASE 
