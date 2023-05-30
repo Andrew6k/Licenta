@@ -33,7 +33,7 @@ else:
     author = scholarly.fill(next(search_query),sections=['publications'])
 
     updateQ = "UPDATE authors SET citations = %s WHERE id = %s"
-    cursor.execute(updateQ, (author['citedby'],))
+    cursor.execute(updateQ, (author['citedby'],idA,))
     
     # print([pub['bib']['title'] for pub in author['publications']])
     # ['bib']['pub_year'] / ['num_citations']
