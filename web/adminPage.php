@@ -132,7 +132,7 @@ if(isset($_COOKIE['message'])){
 </div>
 
 <div class="buttons-import">
-        <form action="adminPage.php" method="post" enctype="multipart/form-data">
+        <form action="importCSV.php" method="post" enctype="multipart/form-data">
             <input type="file" class="btn-submit" name="file" accept=".csv">
             <select name="table-select" id="table-select">
               <option value="">Choose a table</option>
@@ -141,6 +141,13 @@ if(isset($_COOKIE['message'])){
             </select>
             <input type="submit" class="btn-submit" name="iCSV" value="Import CSV">
         </form>
+        <?php
+        if(isset($_COOKIE['message-import'])){
+          $message = $_COOKIE['message-import'];
+          // Clear the cookie
+          setcookie('message-import', '', time() - 3600); // expires in the past
+          echo "<h4>$message</h4>";}
+        ?>
     </div>
 </body>
 </html>
