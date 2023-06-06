@@ -106,11 +106,11 @@ CREATE TABLE journals (
     eISSN VARCHAR(20),
     subdomeniu VARCHAR(255),
     rank VARCHAR(20),
-    Loc in zona INT,
-    year VARCHAR(20),
-    type VARCHAR(20)
+    Loc_in_zona INT,
+    year VARCHAR(20)
 )
 """
+#one more for journals-IF
 cursor.execute(table_create)
 conn.commit()
 # ALTER TABLE conferences ADD COLUMN rank_value INT;

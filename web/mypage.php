@@ -46,9 +46,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website scholarly</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
     <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
+      <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
   </head>
 <body>
@@ -106,39 +110,50 @@
       $sql = "SELECT id, title, conference, year, citations, link, rank FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
       $result=mysqli_query($mysqli,$sql);
         ?>
-        <table align="center" border="1px"">
-        <tr>
-            <th colspan="6"><h2 style="text-align: center;">Publications</h2></th>
-        </tr>
+        <table id="pub-table" align="center" border="1px">
+  <thead>
+    <!-- Table header cells -->
+    <tr>
+      <th>Title</th>
+      <th>Conference</th>
+      <th>Year</th>
+      <th>Citations</th>
+      <th>Rank</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th></th> <!-- An empty cell for the filtering input of the first column -->
+      <th></th> 
+      <th></th> 
+      <th></th> 
+      <th></th> 
+    </tr>
+  </tfoot>
+  <tbody>
+    <!-- Table data rows -->
+    <?php
+    while ($rows = mysqli_fetch_assoc($result)) {
+      $id = $rows['id'];
+      $title = $rows['title'];
+    ?>
+      <tr>
+        <td><?php echo $rows['title']; ?></td>
+        <td><?php echo $rows['conference']; ?></td>
+        <td><?php echo $rows['year']; ?></td>
+        <td><?php echo $rows['citations']; ?></td>
+        <td><?php echo $rows['rank']; ?></td>
+        <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";
+          echo "<a href='editPublications.php?id=$id'>Edit</a>";
+        ?></td>
+      </tr>
+    <?php
+    }
+    ?>
+  </tbody>
+</table>
 
-        <t>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
-            <th>Rank</th>
-            <th>Link</th>
-        </t>
-        <?php
-        while($rows=mysqli_fetch_assoc($result))
-        {
-            $id = $rows['id'];
-            $title = $rows['title'];
-        ?>
-            <tr>
-                <td><?php echo $rows['title']; ?></td>
-                <td><?php echo $rows['conference']; ?></td>
-                <td><?php echo $rows['year']; ?></td>
-                <td><?php echo $rows['citations']; ?></td>
-                <td><?php echo $rows['rank']; ?></td>
-                <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";
-                  echo "<a href='editPublications.php?id=$id'>Edit</a>";
-                ?></td>
-            </tr>
-            <?php
-        } 
-        ?>
-    </table>
       
 </div>
 
@@ -164,5 +179,34 @@
         </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      $('#pub-table').DataTable({
+        columnDefs: [
+          { targets: '_all', orderable: true }, // Enable sorting on all columns
+        ],
+        searching: true,
+        initComplete: function() {
+          this.api().columns().every(function() {
+            var column = this;
+            var input = $('<input type="text">').on('keyup change', function() {
+              column.search($(this).val()).draw();
+            });
+            $(column.footer()).html(input);
+          });
+        },
+        "language": {
+        "paginate": {
+          "first": "&laquo;",
+          "last": "&raquo;",
+          "previous": "&lsaquo;",
+          "next": "&rsaquo;"
+        }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
+
+
