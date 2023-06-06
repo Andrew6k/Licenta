@@ -135,8 +135,9 @@ if(isset($_COOKIE['message'])){
         <form action="importCSV.php" method="post" enctype="multipart/form-data">
             <input type="file" class="btn-submit" name="file" accept=".csv">
             <select name="table-select" id="table-select">
-              <option value="">Choose a table</option>
-              <option value="journals">Journals</option>
+              <option value="choose">Choose a table</option>
+              <option value="journals-ais">Journals AIS</option>
+              <option value="journals-if">Journals IF</option>
               <option value="conferences">Conferences</option>
             </select>
             <input type="submit" class="btn-submit" name="iCSV" value="Import CSV">

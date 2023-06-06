@@ -11,7 +11,7 @@ if(isset($_POST['iCSV'])){
            
             while(($line = fgetcsv($csvFile))!== FALSE){
               
-                if(strtolower($selectedTab) == "journals")
+                if(strtolower($selectedTab) == "journals-ais")
                     {
                     $title = mysqli_real_escape_string($mysqli, $line[0]);
                     $issn = mysqli_real_escape_string($mysqli, $line[1]);
@@ -19,11 +19,27 @@ if(isset($_POST['iCSV'])){
                     $subdomeniu = mysqli_real_escape_string($mysqli, $line[3]);
                     $rank = mysqli_real_escape_string($mysqli, $line[4]);
                     $loc = mysqli_real_escape_string($mysqli, $line[5]);
+                    $year = mysqli_real_escape_string($mysqli, $line[6]);
 
-                    $sql = "INSERT into journals (title, ISSN, eISSN, subdomeniu, rank, Loc_in_zona) 
-                    VALUES ('$title','$issn','$eissn','$subdomeniu','$rank','$loc')";
+                    $sql = "INSERT into journals (title, ISSN, eISSN, subdomeniu, rank, Loc_in_zona, year) 
+                    VALUES ('$title','$issn','$eissn','$subdomeniu','$rank','$loc','$year')";
                     //  values ('".$line[0]."','".$line[1]."','".$line[2]."','".$line[3]."')";
                     mysqli_query($mysqli, $sql);
+                } elseif(strtolower($selectedTab) == "journals-if"){
+
+                    $title = mysqli_real_escape_string($mysqli, $line[2]);
+                    $issn = mysqli_real_escape_string($mysqli, $line[3]);
+                    $eissn = mysqli_real_escape_string($mysqli, $line[4]);
+                    $subdomeniu = mysqli_real_escape_string($mysqli, $line[0]);
+                    $rank = mysqli_real_escape_string($mysqli, $line[5]);
+                    $loc = mysqli_real_escape_string($mysqli, $line[6]);
+                    $year = mysqli_real_escape_string($mysqli, $line[7]);
+
+                    $sql = "INSERT into journals_if (title, ISSN, eISSN, subdomeniu, rank, Loc_in_zona, year) 
+                    VALUES ('$title','$issn','$eissn','$subdomeniu','$rank','$loc','$year')";
+                    //  values ('".$line[0]."','".$line[1]."','".$line[2]."','".$line[3]."')";
+                    mysqli_query($mysqli, $sql);
+
                 } elseif (strtolower($selectedTab) == "conferences"){
                     $title = mysqli_real_escape_string($mysqli, $line[0]);
                     $acronym = mysqli_real_escape_string($mysqli, $line[1]);
@@ -38,17 +54,27 @@ if(isset($_POST['iCSV'])){
                     mysqli_query($mysqli, $sql); 
                 }
 
-                $msj = "Table " . $selectedTab . " updated ";
-                setcookie('message-import', $msj, time() + 3600);
-
-                sleep(3);
-                header("Location: adminPage.php");
+                if($selectedTab != "choose"){
+                    $msj = "Table " . $selectedTab . " updated ";
+                    setcookie('message-import', $msj, time() + 3600);
+                    sleep(2);
+                    header("Location: adminPage.php");
+                }else{
+                    $msj = "Select a table!";
+                    setcookie('message-import', $msj, time() + 3600);
+                    header("Location: adminPage.php");
+                }
                 // header("Location: http://localhost/web/adminPage.php");
 
             }
             fclose($csvFile);
 
         }
+    }else{
+        $msj = "Select an import file!";
+        setcookie('message-import', $msj, time() + 3600);
+        
+        header("Location: adminPage.php");
     }
  
 }
