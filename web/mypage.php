@@ -176,6 +176,14 @@
             <input type="submit" class="btn-submit" name="updatedb" value="Update">
         </form>
         </div>
+        <div class="butOp3">
+        <h3>View tables</h3>
+        <?php 
+         echo "<a href='tables.php?obj=journalsIF'>Journals IF</a>";
+         echo "<a href='tables.php?obj=journalsAIS'>Journals AIS</a>";
+         echo "<a href='tables.php?obj=conferences'>Conferences</a>";
+        ?>
+        </div>
         </div>
     </div>
   </div>

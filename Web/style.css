@@ -179,7 +179,7 @@ background-color: #105212;
 
 .butOp{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 0.3fr 1fr 1.2fr;
 
 }
 .buttons a{
@@ -193,6 +193,12 @@ background-color: #105212;
   background-color: green;
 }
 
+.butOp3 a{
+  background-color: #4CAF50 !important;
+}
+.butOp3 a:hover{
+  background-color: #105212 !important;
+}
 .operations{
   display: flex;
   justify-content: space-between;
@@ -298,3 +304,4 @@ div.dataTables_wrapper div.dataTables_length {
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
   background-color: #999;
 }
+

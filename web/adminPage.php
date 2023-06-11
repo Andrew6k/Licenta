@@ -81,6 +81,9 @@
     <div class="buttons">
         <h3>View tables</h3>
         <?php 
+         echo "<a href='tables.php?obj=journalsIF'>Journals IF</a>";
+         echo "<a href='tables.php?obj=journalsAIS'>Journals AIS</a>";
+         echo "<a href='tables.php?obj=conferences'>Conferences</a>";
          echo "<a href='tables.php?obj=domains'>Domains</a>";
          echo "<a href='tables.php?obj=publ'>Publications</a>";
          echo "<a href='tables.php?obj=authors'>Authors</a>";
