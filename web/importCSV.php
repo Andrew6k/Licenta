@@ -13,30 +13,30 @@ if(isset($_POST['iCSV'])){
               
                 if(strtolower($selectedTab) == "journals-ais")
                     {
-                    $title = mysqli_real_escape_string($mysqli, $line[0]);
-                    $issn = mysqli_real_escape_string($mysqli, $line[1]);
-                    $eissn = mysqli_real_escape_string($mysqli, $line[2]);
-                    $subdomeniu = mysqli_real_escape_string($mysqli, $line[3]);
+                    $title = mysqli_real_escape_string($mysqli, $line[2]);
+                    $issn = mysqli_real_escape_string($mysqli, $line[3]);
+                    // $eissn = mysqli_real_escape_string($mysqli, $line[4]);
+                    $subdomeniu = mysqli_real_escape_string($mysqli, $line[0]);
                     $rank = mysqli_real_escape_string($mysqli, $line[4]);
                     $loc = mysqli_real_escape_string($mysqli, $line[5]);
                     $year = mysqli_real_escape_string($mysqli, $line[6]);
 
-                    $sql = "INSERT into journals (title, ISSN, eISSN, subdomeniu, rank, Loc_in_zona, year) 
-                    VALUES ('$title','$issn','$eissn','$subdomeniu','$rank','$loc','$year')";
+                    $sql = "INSERT into journals (title, ISSN, subdomeniu, rank, Loc_in_zona, year) 
+                    VALUES ('$title','$issn','$subdomeniu','$rank','$loc','$year')";
                     //  values ('".$line[0]."','".$line[1]."','".$line[2]."','".$line[3]."')";
                     mysqli_query($mysqli, $sql);
                 } elseif(strtolower($selectedTab) == "journals-if"){
 
                     $title = mysqli_real_escape_string($mysqli, $line[2]);
                     $issn = mysqli_real_escape_string($mysqli, $line[3]);
-                    $eissn = mysqli_real_escape_string($mysqli, $line[4]);
+                    // $eissn = mysqli_real_escape_string($mysqli, $line[4]);
                     $subdomeniu = mysqli_real_escape_string($mysqli, $line[0]);
-                    $rank = mysqli_real_escape_string($mysqli, $line[5]);
-                    $loc = mysqli_real_escape_string($mysqli, $line[6]);
-                    $year = mysqli_real_escape_string($mysqli, $line[7]);
+                    $rank = mysqli_real_escape_string($mysqli, $line[4]);
+                    $loc = mysqli_real_escape_string($mysqli, $line[5]);
+                    $year = mysqli_real_escape_string($mysqli, $line[6]);
 
-                    $sql = "INSERT into journals_if (title, ISSN, eISSN, subdomeniu, rank, Loc_in_zona, year) 
-                    VALUES ('$title','$issn','$eissn','$subdomeniu','$rank','$loc','$year')";
+                    $sql = "INSERT into journals_if (title, ISSN, subdomeniu, rank, Loc_in_zona, year) 
+                    VALUES ('$title','$issn','$subdomeniu','$rank','$loc','$year')";
                     //  values ('".$line[0]."','".$line[1]."','".$line[2]."','".$line[3]."')";
                     mysqli_query($mysqli, $sql);
 

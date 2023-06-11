@@ -10,10 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website scholarly</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
     <script src="script.js"></script>
     <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   </head>
 <body>
 <div class="nav">
@@ -69,18 +70,30 @@
         $sql = "SELECT * FROM authors WHERE name like '%$word%' ORDER BY citations";
         $result=mysqli_query($mysqli,$sql);
           ?>
-          <table align="center" border="1px"">
+          <table id="pub-table" align="center" border="1px"">
+          <thead>
           <tr>
               <th colspan="5"><h2 style="text-align: center;">Results</h2></th>
           </tr>
 
-          <t>
+          
+          <tr>
               <th>Name</th>
               <th>Affiliation</th>
               <th>Email_domain</th>
               <th>Citations</th>
               <th>Link</th>
-          </t>
+          </tr>
+          </thead>
+          <tfoot>
+          <tr>
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th>
+          </tr>
+        </tfoot>
+          <tbody>
           <?php
           while($rows=mysqli_fetch_assoc($result))
           {
@@ -97,26 +110,36 @@
               <?php
           }
           ?>
+        </tbody>
       </table>
       
-  </body>
-  </html>
     <?php }elseif ($category == "title") {
       $sql = "SELECT * FROM publications WHERE title like '%$word%'";
       $result=mysqli_query($mysqli,$sql);
         ?>
-        <table align="center" border="1px"">
+        <table id="pub-table" align="center" border="1px"">
+        <thead>
         <tr>
             <th colspan="5"><h2 style="text-align: center;">Results</h2></th>
         </tr>
 
-        <t>
+        <tr>
             <th>Title</th>
             <th>Conference</th>
             <th>Year</th>
             <th>Citations</th>
             <th>Link</th>
-        </t>
+        </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
@@ -132,28 +155,39 @@
             <?php
         }
         ?>
+        </tbody>
     </table>
-    
-</body>
-</html>
+
 
     <?php }elseif ($category == "year"){
       $year = intval($word);
       $sql = "SELECT * FROM publications WHERE year = '$year' ORDER BY citations DESC";
       $result=mysqli_query($mysqli,$sql);
         ?>
-        <table align="center" border="1px"">
+        <table id="pub-table" align="center" border="1px"">
+        <thead>
         <tr>
             <th colspan="5"><h2 style="text-align: center;">Results</h2></th>
         </tr>
 
-        <t>
+
+        <tr>
             <th>Title</th>
             <th>Conference</th>
             <th>Year</th>
             <th>Citations</th>
             <th>Link</th>
-        </t>
+        </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th> 
+          </tr>
+        </tfoot>
+        <tbody>
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
@@ -169,18 +203,17 @@
             <?php
         }
         ?>
+        </tbody>
     </table>
-    
-</body>
-</html>
 
     <?php }else {
       $sql = "SELECT DISTINCT authors.id,name,affiliation,email_domain,citations,domain FROM authors JOIN author_domains ON authors.id = author_domains.author_id JOIN domains ON domains.id = author_domains.domain_id WHERE domains.domain like '%$word%'";
       $result=mysqli_query($mysqli,$sql);
         ?>
-        <table align="center" border="1px"">
+        <table id="pub-table" align="center" border="1px"">
+        <thead>
         <tr>
-            <th ><h2 style="text-align: center;">Results</h2></th>
+            <th colspan="6"><h2 style="text-align: center;">Results</h2></th>
         </tr>
 
         <t>
@@ -191,6 +224,17 @@
             <th>Domain</th>
             <th>Link</th>
         </t>
+        </thead>
+        <tfoot>
+          <tr>
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
@@ -208,10 +252,8 @@
             <?php
         }
         ?>
+        </tbody>
     </table>
-    
-</body>
-</html>
 
 
 
@@ -219,9 +261,41 @@
   
   
   } ?>
+<script>
+    $(document).ready(function() {
+      $('#pub-table').DataTable({
+        columnDefs: [
+          { targets: '_all', orderable: true }, // Enable sorting on all columns
+        ],
+        searching: true,
+        initComplete: function() {
+          this.api().columns().every(function() {
+            var column = this;
+            var input = $('<input type="text">').on('keyup change', function() {
+              column.search($(this).val()).draw();
+            });
+            $(column.footer()).html(input);
+          });
+        },
+        "language": {
+        "paginate": {
+          "first": "&laquo;",
+          "last": "&raquo;",
+          "previous": "&lsaquo;",
+          "next": "&rsaquo;"
+        }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
 
-
-
+<style>
+  #pub-table_filter{
+    display:none;
+  }
+</style>
 
 
 
