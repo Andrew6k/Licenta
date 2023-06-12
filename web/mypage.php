@@ -53,6 +53,7 @@
       <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   </head>
 <body>
@@ -114,11 +115,11 @@
   <thead>
     <!-- Table header cells -->
     <tr>
-      <th>Title</th>
-      <th>Conference</th>
-      <th>Year</th>
-      <th>Citations</th>
-      <th>Rank</th>
+      <th>Title<div class="sort-symbol"><></div></th>
+      <th>Conference<div class="sort-symbol"><></div></th>
+      <th>Year<div class="sort-symbol"><></div></th>
+      <th>Citations<div class="sort-symbol"><></div></th>
+      <th>Rank<div class="sort-symbol"><></div></th>
       <th>Link</th>
     </tr>
   </thead>
@@ -169,13 +170,13 @@
         </form>
         </div>
         <h3></h3>
-        <div class="butOp2">
+      <div class="butOp2">
         <h3>Update database</h3>
     
         <form action="updatePubs.php" method="post">
             <input type="submit" class="btn-submit" name="updatedb" value="Update">
         </form>
-        </div>
+      </div>
         <div class="butOp3">
         <h3>View tables</h3>
         <?php 

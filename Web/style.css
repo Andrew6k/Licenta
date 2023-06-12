@@ -305,3 +305,30 @@ div.dataTables_wrapper div.dataTables_length {
   background-color: #999;
 }
 
+.icon-container {
+  padding-top:20px;
+  /* position: relative;
+  display: inline-block; */
+}
+
+.icon-container:hover::after {
+  content: "The csv file desired format: IF & AIS - subdomain, index, title, ISSN, rank, top-value \A Conference: title, acronym, coreyear, rank, top-value";
+  /* position: absolute;
+  top: 100%;
+  left: 50%; */
+  /* transform: translateX(-50%); */
+  background-color: #000;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.sort-symbol{
+  /* top: -10px;
+  content: "^"; */
+  display: inline-block;
+  transform: rotate(90deg);
+  font-weight: bold;
+}

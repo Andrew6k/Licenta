@@ -78,10 +78,10 @@
 
           
           <tr>
-              <th>Name</th>
-              <th>Affiliation</th>
-              <th>Email_domain</th>
-              <th>Citations</th>
+              <th>Name<div class="sort-symbol"><></div></th>
+              <th>Affiliation<div class="sort-symbol"><></div></th>
+              <th>Email_domain<div class="sort-symbol"><></div></th>
+              <th>Citations<div class="sort-symbol"><></div></th>
               <th>Link</th>
           </tr>
           </thead>
@@ -124,10 +124,10 @@
         </tr>
 
         <tr>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>Conference<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
+            <th>Citations<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </tr>
         </thead>
@@ -172,10 +172,10 @@
 
 
         <tr>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>Conference<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
+            <th>Citations<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </tr>
         </thead>
@@ -217,11 +217,11 @@
         </tr>
 
         <t>
-            <th>Name</th>
-            <th>Affiliation</th>
-            <th>Email_domain</th>
-            <th>Citations</th>
-            <th>Domain</th>
+            <th>Name<div class="sort-symbol"><></div></th>
+            <th>Affiliation<div class="sort-symbol"><></div></th>
+            <th>Email_domain<div class="sort-symbol"><></div></th>
+            <th>Citations<div class="sort-symbol"><></div></th>
+            <th>Domain<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </t>
         </thead>

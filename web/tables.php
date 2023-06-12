@@ -56,10 +56,10 @@
           </tr>
 
           <tr>
-              <th>Name</th>
-              <th>Affiliation</th>
-              <th>Email_domain</th>
-              <th>Citations</th>
+              <th>Name<div class="sort-symbol"><></div></th>
+              <th>Affiliation<div class="sort-symbol"><></div></th>
+              <th>Email_domain<div class="sort-symbol"><></div></th>
+              <th>Citations<div class="sort-symbol"><></div></th>
               <th>Link</th>
           </tr>
           </thead>
@@ -104,11 +104,11 @@
         </tr>
 
         <tr>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
-            <th>Rank</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>Conference<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
+            <th>Citations<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </tr>
         </thead>
@@ -156,11 +156,11 @@
         </tr>
 
         <tr>
-            <th>Title</th>
-            <th>Acronym</th>
-            <th>Year</th>
-            <th>Rank</th>
-            <th>Top</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>Acronym<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
+            <th>Top<div class="sort-symbol"><></div></th>
         </tr>
         </thead>
         <tfoot>
@@ -205,12 +205,12 @@
         </tr>
 
         <tr>
-            <th>Title</th>
-            <th>ISSN</th>
-            <th>Subdomain</th>
-            <th>Rank</th>
-            <th>Top</th>
-            <th>Year</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>ISSN<div class="sort-symbol"><></div></th>
+            <th>Subdomain<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
+            <th>Top<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
         </tr>
         </thead>
         <tfoot>
@@ -258,12 +258,12 @@
         </tr>
 
         <tr>
-            <th>Title</th>
-            <th>ISSN</th>
-            <th>Subdomain</th>
-            <th>Rank</th>
-            <th>Top</th>
-            <th>Year</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>ISSN<div class="sort-symbol"><></div></th>
+            <th>Subdomain<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
+            <th>Top<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
         </tr>
         </thead>
         <tfoot>
@@ -310,8 +310,8 @@
         </tr>
 
         <tr>
-            <th>ID</th>
-            <th>Name</th>
+            <th>ID<div class="sort-symbol"><></div></th>
+            <th>Name<div class="sort-symbol"><></div></th>
         </tr>
         </thead>
 
