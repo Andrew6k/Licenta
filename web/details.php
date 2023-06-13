@@ -36,10 +36,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website scholarly</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
     <script src="script.js"></script>
     <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   </head>
 <body>
 <div class="nav">
@@ -83,18 +84,29 @@
       $sql = "SELECT id, title, conference, year, citations, link FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
       $result=mysqli_query($mysqli,$sql);
         ?>
-        <table align="center" border="1px"">
+        <table id="pub-table" align="center" border="1px"">
+        <thead>
         <tr>
             <th colspan="5"><h2 style="text-align: center;">Publications</h2></th>
         </tr>
 
         <t>
-            <th>Title</th>
-            <th>Conference</th>
-            <th>Year</th>
-            <th>Citations</th>
+            <th>Title<div class="sort-symbol"><></div></th>
+            <th>Conference<div class="sort-symbol"><></div></th>
+            <th>Year<div class="sort-symbol"><></div></th>
+            <th>Citations<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </t>
+        </thead>
+        <tfoot>
+          <tr>
+            <th></th> 
+            <th></th> 
+            <th></th> 
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
         <?php
         while($rows=mysqli_fetch_assoc($result))
         {
@@ -111,7 +123,35 @@
             <?php
         }
         ?>
+        </tbody>
     </table>
 </div>
+<script>
+    $(document).ready(function() {
+      $('#pub-table').DataTable({
+        columnDefs: [
+          { targets: '_all', orderable: true }, // Enable sorting on all columns
+        ],
+        searching: true,
+        initComplete: function() {
+          this.api().columns().every(function() {
+            var column = this;
+            var input = $('<input type="text">').on('keyup change', function() {
+              column.search($(this).val()).draw();
+            });
+            $(column.footer()).html(input);
+          });
+        },
+        "language": {
+        "paginate": {
+          "first": "&laquo;",
+          "last": "&raquo;",
+          "previous": "&lsaquo;",
+          "next": "&rsaquo;"
+        }
+        }
+      });
+    });
+  </script>
 </body>
 </html>

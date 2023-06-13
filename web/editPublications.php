@@ -81,11 +81,15 @@
 <div class="similar">
   <?php
   $startPosition = strpos(strtolower($conference), "conference on");
+  $startPosition2 = strpos(strtolower($conference), "congress on");
   $ok = 0;
     // Extract the substring after "conference on"
-  if ($startPosition !== false) {
+  if ($startPosition !== false or $startPosition2 !== false) {
       $ok = 1;
-      $substring = substr($conference, $startPosition + strlen("conference on"));
+      if($startPosition)
+        $substring = substr($conference, $startPosition + strlen("conference on"));
+      elseif($startPosition2)
+        $substring = substr($conference, $startPosition2 + strlen("congress on"));
       $substring = trim($substring); // Remove leading/trailing whitespace if needed
 
   // Output the extracted substring
@@ -139,19 +143,36 @@
 
       // echo $html;
     }
+  else{
+    $conference = preg_replace("/\([^()]*\)/", "", $conference); 
+    $conference = trim($conference);
+    $publicationWords = explode(" ", $conference);
+    $matchingJournals = array();
+
+    $sql = "SELECT title, rank FROM journals WHERE title like '%$conference%' UNION SELECT title, rank FROM journals_if where title like '%conference%'" ;
+
+    $result=mysqli_query($mysqli,$sql);
+    
+      // Fetch the matching conferences/journals
+    while($rows=mysqli_fetch_assoc($result)){
+      $ok = 2;
+      $matchingConferences[$rows["title"]] = $rows["rank"];
+    }
+  }
   ?>
   <div class="scroll-container">
     <?php
-      if($ok == 1){ ?>
+      if($ok == 1 or $ok == 2){ ?>
         <table>
         <?php
           foreach($matchingConferences as $key => $val)
           {  
-    ?>
-    <tr>
-        <td><?php echo $key; ?></td>
-        <td><?php echo $val; }?></td>
-    </tr>
+            ?>
+            <tr>
+                <td><?php echo $key." - "; ?></td>
+                <td><?php echo $val; ?></td>
+            </tr>
+            <?php } ?>
     </table>
     <?php } ?>
   </div>

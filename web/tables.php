@@ -46,7 +46,7 @@
 <?php
       // echo $category;
       if ($obj == "authors"){
-        $sql = "SELECT * FROM authors ";
+        $sql = "SELECT * FROM authors WHERE isadmin = 0";
         $result=mysqli_query($mysqli,$sql);
           ?>
           <table id="pub-table" align="center" border="1px"">
