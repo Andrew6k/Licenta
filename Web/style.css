@@ -332,3 +332,16 @@ div.dataTables_wrapper div.dataTables_length {
   transform: rotate(90deg);
   font-weight: bold;
 }
+
+
+table td.citations{
+  text-align: left ;
+  
+}
+.citations p{
+  margin-left: 5%;
+  text-decoration: underline;
+}
+.citations ul {
+  margin-left: 20%;
+}

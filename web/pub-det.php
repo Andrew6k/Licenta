@@ -36,6 +36,14 @@
       echo "<a href='logout.php'>Logout</a>";
       
       echo "<a href='mypage.php'>$name</a>";
+      $mail = $_SESSION['username'];
+      $sql = "SELECT id FROM authors WHERE mail='$mail'";
+      $result = mysqli_query($mysqli, $sql);
+
+      if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $author_id = $row["id"];
+      }
       
     }elseif (isset($_SESSION['username']) and isset($_SESSION['isadmin']) and ($_SESSION['isadmin'] == 1)) {
       $name = $_SESSION['username'];
@@ -56,29 +64,113 @@
     ?>
     </div>
 </div>
+<?php
+if(isset($_SESSION['username'])){
+  $sql = "SELECT * FROM citations c JOIN author_citations a ON c.id = a.citation_id WHERE publication_id = '$id' AND type = 'Direct' AND author_id = '$author_id'";
+  $result = mysqli_query($mysqli, $sql);
+  $direct_citations = array();
+  while ($rows = mysqli_fetch_assoc($result)) {
+      $direct_citations[$rows['title']] = $rows['link'];
+  }
+  $sql = "SELECT * FROM citations c JOIN author_citations a ON c.id = a.citation_id WHERE publication_id = '$id' AND type = 'Indirect' AND author_id = '$author_id'";
+  $result = mysqli_query($mysqli, $sql);
+  $indirect_citations = array();
+  while ($rows = mysqli_fetch_assoc($result)) {
+      $indirect_citations[$rows['title']] = $rows['link'];
+  }
+
+  $sql = "SELECT * FROM citations WHERE publication_id = '$id'";
+  $result = mysqli_query($mysqli, $sql);
+  $other_citations = array();
+  while ($rows = mysqli_fetch_assoc($result)) {
+    if (array_key_exists($rows['title'], $direct_citations) or array_key_exists($rows['title'], $indirect_citations))
+        continue;
+    else
+      $other_citations[$rows['title']] = $rows['link'];
+  }}
+else{
+  $sql = "SELECT * FROM citations c JOIN author_citations a ON c.id = a.citation_id WHERE publication_id = '$id' AND type = 'Direct'";
+  $result = mysqli_query($mysqli, $sql);
+  $direct_citations = array();
+  while ($rows = mysqli_fetch_assoc($result)) {
+      $direct_citations[$rows['title']] = $rows['link'];
+  }
+
+  $indirect_citations = array();
+
+  $sql = "SELECT * FROM citations WHERE publication_id = '$id'";
+  $result = mysqli_query($mysqli, $sql);
+  $other_citations = array();
+  while ($rows = mysqli_fetch_assoc($result)) {
+    if (array_key_exists($rows['title'], $direct_citations) or array_key_exists($rows['title'], $indirect_citations))
+        continue;
+    else
+      $other_citations[$rows['title']] = $rows['link'];
+  }
+}
+?>
 
 <div class="articles">
-         <table align="center" border="1px"">
-            <tr>
-                <td>Conference</td>
-                <td><?php echo $conference; ?></td>
-            </tr>
-            <tr>
-                <td>Year</td>
-                <td><?php echo $year; ?></td>
-            </tr>
-            <tr>
-                <td>Summary</td>
-                <td><?php echo $summary; ?></td>
-            </tr>
-            <tr>
-                <td>Citations</td>
-                <td><?php echo $citations; ?></td>
-            </tr>
-            <tr>
-                <td>Link</td>
-                <td><?php echo "<a href='$link'>Original link</a><br>";?></td>
-            </tr>
+    <table align="center" border="1px">
+        <tr>
+            <td>Conference</td>
+            <td><?php echo $conference; ?></td>
+        </tr>
+        <tr>
+            <td>Year</td>
+            <td><?php echo $year; ?></td>
+        </tr>
+        <tr>
+            <td>Summary</td>
+            <td><?php echo $summary; ?></td>
+        </tr>
+        <tr>
+            <td>Citations</td>
+            <td><?php echo $citations; ?></td>
+        </tr>
+        <tr>
+            <td>Link</td>
+            <td><?php echo "<a href='$link'>Original link</a><br>"; ?></td>
+        </tr>
+        <tr>
+            <td>Citations</td>
+            <td class="citations">
+              <?php if (!empty($direct_citations)){ ?>
+                <p><strong>Direct citations</strong></p>
+                <ul>
+                <?php
+                foreach ($direct_citations as $citation => $link) {
+                    echo "<li>$citation &nbsp&nbsp";
+                    echo "<a href='$link'>Link</a></li>";
+                } 
+                ?>
+                </ul> 
+              <?php }if(!empty($indirect_citations)){ ?>
+                <p><strong>Indirect citations</strong></p>
+                <ul>
+                <?php
+                foreach ($indirect_citations as $citation => $link) {
+                    echo "<li>$citation &nbsp&nbsp";
+                    echo "<a href='$link'>Link</a></li>";
+                }
+                ?>
+                </ul>
+                <?php }if(!empty($other_citations)){ ?>
+                <p><strong>Other citations</strong></p>
+                <ul>
+                <?php
+                foreach ($other_citations as $citation => $link) {
+                    echo "<li>$citation &nbsp&nbsp";
+                    echo "<a href='$link'>Link</a></li>";
+                }
+                ?>
+                </ul>
+                <?php } ?>
+            </td>
+        </tr>
+    </table>
+</div>
+
               
     </table>
 </div>
