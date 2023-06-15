@@ -29,15 +29,52 @@
     array_push($fields,$domain);
   } 
   
+  $sql = "SELECT id, title, citations, rank FROM publications JOIN author_publications ON publications.id = author_publications.publication_id  WHERE author_id = '$nr'";
+  $result=mysqli_query($mysqli,$sql);
+
+  $publicationData = array();
+  while ($row = mysqli_fetch_assoc($result)) {
+    $publication = array(
+      'id' => $row['id'],
+      'title' => $row['title'],
+      'citations' => $row['citations'],
+      'rank' => $row['rank']
+    );
+    $publicationData[] = $publication;
+  }
+
+  
+  $publicationDataJSON = json_encode($publicationData);
 ?>
 
-<script>function score(citations) {
-        var points = 10;
+<script>
+  
+  var publicationData = <?php echo $publicationDataJSON; ?>;
 
-        var score = citations * points;
+  var values = {
+    'A': 10,
+    'B': 8,
+    'C': 5,
+    'D': 3
+  };
 
-        return score;
-      }</script>
+  var totalScore = 0;
+  publicationData.forEach(function(publication) {
+    var rank = publication.rank;
+    var citations = publication.citations;
+    var value = values[rank] || 1; // Get the weight for the rank, default to 0 if not found
+    var score = value * citations;
+    totalScore += score;
+  });
+
+  // function score(citations) {
+  //       var points = 10;
+
+  //       var score = citations * points;
+
+  //       return score;
+  //     }
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,15 +129,18 @@
     ?>
       <p>Score: <span id="score">
         <script>
-        var score = score(<?php echo $citations; ?>);
+        var score = document.getElementById("score");
+
         var scoreClass = "low-score";
-        if (score >= 6000) {
+        if (totalScore >= 3300) {
           scoreClass = "high-score";
-        } else if (score >= 3000) {
+        } else if (totalScore >= 3000) {
           scoreClass = "medium-score";
         }
-        document.getElementById("score").className = scoreClass;
-        document.write(score);
+        // document.getElementById("score").className = scoreClass;
+        // document.write(score);
+        score.className = scoreClass;
+        score.textContent = totalScore;
       </script></span></p>
     </div>
 </div>
