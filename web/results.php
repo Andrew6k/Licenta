@@ -128,6 +128,7 @@
             <th>Conference<div class="sort-symbol"><></div></th>
             <th>Year<div class="sort-symbol"><></div></th>
             <th>Citations<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </tr>
         </thead>
@@ -150,6 +151,7 @@
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
+                <td><?php echo $rows['rank']; ?></td>
                 <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
             </tr>
             <?php
@@ -176,6 +178,7 @@
             <th>Conference<div class="sort-symbol"><></div></th>
             <th>Year<div class="sort-symbol"><></div></th>
             <th>Citations<div class="sort-symbol"><></div></th>
+            <th>Rank<div class="sort-symbol"><></div></th>
             <th>Link</th>
         </tr>
         </thead>
@@ -198,6 +201,7 @@
                 <td><?php echo $rows['conference']; ?></td>
                 <td><?php echo $rows['year']; ?></td>
                 <td><?php echo $rows['citations']; ?></td>
+                <td><?php echo $rows['rank']; ?></td>
                 <td><?php echo "<a href='pub-det.php?id=$id'>More information</a><br>";?></td>
             </tr>
             <?php

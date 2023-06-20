@@ -13,6 +13,7 @@
     $summary = $row["summary"];
     $citations = $row["citations"];
     $link = $row["link"];
+    $rank = $row['rank'];
   } 
 ?>
 
@@ -127,6 +128,10 @@ else{
         <tr>
             <td>Citations</td>
             <td><?php echo $citations; ?></td>
+        </tr>
+        <tr>
+            <td>Rank</td>
+            <td><?php echo $rank; ?></td>
         </tr>
         <tr>
             <td>Link</td>
