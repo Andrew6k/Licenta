@@ -120,7 +120,7 @@
         <table id="pub-table" align="center" border="1px"">
         <thead>
         <tr>
-            <th colspan="5"><h2 style="text-align: center;">Results</h2></th>
+            <th colspan="6"><h2 style="text-align: center;">Results</h2></th>
         </tr>
 
         <tr>
